@@ -33,7 +33,7 @@ public class Login extends JPanel{
       add(la1); add(tf);
       
       //로그인 부분 비밀번호와 비밀번호 칠 textField
-      la2 = new JLabel("대화명",JLabel.RIGHT);
+      la2 = new JLabel("비밀번호",JLabel.RIGHT);
       la2.setBounds(745, 565, 80, 30);
       pf = new JTextField();
       pf.setBounds(830, 565, 150, 30);
