@@ -68,6 +68,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			connection(id, name, sex);
 		} 
 		else if (e.getSource() == login.b2) {
+			
 		}
 		else if (e.getSource() == login.b3) {
 			setVisible(false);
