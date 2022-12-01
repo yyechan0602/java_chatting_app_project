@@ -1,1 +1,1 @@
-# java_chating_app_project
+# java_chatㅅing_app_project
