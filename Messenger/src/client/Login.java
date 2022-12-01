@@ -23,7 +23,7 @@ public class Login extends JPanel{
    {   
       //이미지 정보 읽기
       setLayout(null); //직접 배치
-      back=Toolkit.getDefaultToolkit().getImage("c:\\javaDev\\back.png");
+      back=Toolkit.getDefaultToolkit().getImage("C:\\Users\\ariance\\Documents\\카카오톡 받은 파일\\배경2.jpg");
       
       //로그인 부분 아이디와 아이디 칠 textField
       la1 = new JLabel("아이디", JLabel.RIGHT);

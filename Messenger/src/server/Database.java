@@ -15,12 +15,15 @@ public class Database {
 	private String PASSWORD = "qwe123";
 	Connection conn = null;
 	Statement stmt = null;
-
+	ResultSet rs = null;
+	boolean result = false;
+	String resultStr = null;
+	
 	public Database(){
 		try {
 			Class.forName(DRIVER_CLASS);
 			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			System.out.println("연결성공");
+			System.out.println("Database connection successful...");
 			stmt = conn.createStatement();
 
 		} catch (ClassNotFoundException e) {
@@ -33,7 +36,7 @@ public class Database {
 	public void clients() {
 		String sql = "Select * from clients;";
 		try {
-			ResultSet rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				String id = rs.getString("id");
 				String password = rs.getString("password");
@@ -62,5 +65,63 @@ public class Database {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	public boolean SignUp(String id) {
+		String sql = ("select id from clients where id = '" + id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			if (!rs.next()) {
+				result = true;
+			} else {
+				result = false;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+	
+	public boolean LogIn(String id, String password) {
+		String sql = ("select password from clients where id = '" + id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				String spassword = rs.getString("password");
+				if (spassword.equals(password)) {
+					result = true;
+				} else {
+					result = false;
+				}
+			} else {
+				result = false;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+	
+	public String getName(String id) {
+		String sql = ("select name from clients where id = '" + id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			resultStr = rs.getString("name");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return resultStr;
+	}
+	
+	public String getSex(String id) {
+		String sql = ("select sex from clients where id = '" + id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			resultStr = rs.getString("sex");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return resultStr;
 	}
 }
