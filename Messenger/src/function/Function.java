@@ -8,22 +8,26 @@ public class Function {
 	public static final int REJECT_SIGNUP = 102;
 
 	// 로그인
-	public static final int LOGIN = 103;
-	public static final int PERMIT_LOGIN = 104;
-	public static final int REJECT_LOGIN = 105;
-	public static final int ANOTHER_LOGIN = 106;
+	public static final int LOGIN = 110;
+	public static final int PERMIT_LOGIN = 111;
+	public static final int REJECT_LOGIN = 112;
+	public static final int ANOTHER_LOGIN = 113;
 
+	// 로그아웃
+	public static final int LOGOUT = 120;
+	public static final int ANOTHER_LOGOUT = 121;
+	
 	// 채팅방 목록기능
-	public static final int ENTERROOM = 110;
-	public static final int MAKEROOM = 111;
+	public static final int ENTERROOM = 130;
+	public static final int MAKEROOM = 131;
 
 	// 채팅방 기능
-	public static final int EXITROOM = 120;
-	public static final int INVITE = 121;
+	public static final int EXITROOM = 140;
+	public static final int INVITE = 141;
 
 	// 채팅방의 범위
 	// 1 <= CHATROOM <= 99
-	// 대기실
-	public static final int WAITCHAT = 0;
+	// 대기실 = 0
+	public static final int CHATTING = 300;
 
 }
