@@ -64,7 +64,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	
 	// 회원가입 연결 
 	public void connection2(String id, String pw, String sex, String name) {
-		// 서버연결 => 회원가 요청
+		// 서버연결 => 회원가입 요청
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
