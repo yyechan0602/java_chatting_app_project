@@ -52,6 +52,7 @@ public class Database {
 
 	public void insert_client(String id, String password, String name, String sex) {
 		String sql = ("insert into clients(id, password, name, sex) values('" + id + "', '" + password + "', '" + name + "', '" + sex + "');");
+		System.out.println(sql);
 		try {
 			stmt.executeUpdate(sql);
 		} catch (SQLException e) {

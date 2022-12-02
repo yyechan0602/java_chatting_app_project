@@ -88,12 +88,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
 			// 연결이 되면 회원가입 요청
-<<<<<<< HEAD
 			out.write((Function.MAKEROOM + "|" + id + "|" + pw + "|" + sex + "|" + name + "\n").getBytes());
 			System.out.println(Function.MAKEROOM + "|" + id + "|" + pw + "|" + sex + "|" + name + "\n");
-=======
-			out.write((Function.MAKEROOM + "|" + id + "|" + sex + "|" + pw + "|" + name + "\n").getBytes());
->>>>>>> 432ce85de6c5959791d96cbce8e9907fee21dd7c
 		} catch (Exception ex) {
 		}
 		// 연결이 되면 지시를 받는다
