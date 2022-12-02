@@ -102,6 +102,7 @@ public class Server implements Runnable {
 							messageTo(Function.PERMIT_LOGIN + "|" + id);
 							// 회원 목록 추가
 							for (Client user : waitVc) {
+								System.out.println(Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
 								messageTo(Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
 							}
 							// 로그인창에서 => 대기창으로 변경

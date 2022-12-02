@@ -20,8 +20,8 @@ public class WaitRoom extends JPanel {
         table1 = new JTable(model1);
         JScrollPane js1 = new JScrollPane(table1);
  
-        String[] col2 = { "ID", "대화명", "성별", "위치" };
-        String[][] row2 = new String[0][3];
+        String[] col2 = { "ID", "성별", "비밀번호" };
+        String[][] row2 = new String[0][2];
  
         model2 = new DefaultTableModel(row2, col2);
         table2 = new JTable(model2);
@@ -36,10 +36,10 @@ public class WaitRoom extends JPanel {
  
         b1 = new JButton("방 만들기");
         b2 = new JButton("입장하기");
-        b3 = new JButton("정보보기");
-        b4 = new JButton("쪽지보내기");
-        b5 = new JButton("일대일게임");
-        b6 = new JButton("나가기");
+        b3 = new JButton("옵션");
+        b4 = new JButton("로그아웃");
+        //b5 = new JButton("일대일게임");
+        //b6 = new JButton("나가기");
  
         // 배치
         setLayout(null);
@@ -60,8 +60,8 @@ public class WaitRoom extends JPanel {
         p.add(b2);
         p.add(b3);
         p.add(b4);
-        p.add(b5);
-        p.add(b6);
+       // p.add(b5);
+        //p.add(b6);
  
         p.setBounds(615, 523, 390, 350);
         add(p);

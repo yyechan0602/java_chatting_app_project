@@ -1,5 +1,6 @@
 package server;
 
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,11 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Database {
-	private String DRIVER_CLASS = "org.mariadb.jdbc.Driver";
-	private String URL = "jdbc:mariadb://localhost:3307/chatting";
+	private String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
+	private String URL = "jdbc:mysql://localhost:3306/chatting";
 
 	private String USERNAME = "root";
-	private String PASSWORD = "qwe123";
+	private String PASSWORD = "seulin001024*";
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
