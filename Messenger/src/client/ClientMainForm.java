@@ -82,14 +82,14 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	}
 
 	// 회원가입 연결
-	public void connection2(String id, String pw, String sex, String name) {
+	public void connection2(String id, String sex, String pw, String name) {
 		// 서버연결 => 회원가입 요청
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
 			// 연결이 되면 회원가입 요청
-			out.write((Function.MAKEROOM + "|" + id + "|" + pw + "|" + sex + "|" + name + "\n").getBytes());
+			out.write((Function.MAKEROOM + "|" + id + "|" + sex + "|" + pw + "|" + name + "\n").getBytes());
 		} catch (Exception ex) {
 		}
 		// 연결이 되면 지시를 받는다
@@ -148,7 +148,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			else
 				sex = "여자";
 			String name = su.tf2.getText();
-			connection2(id, pw, sex, name);
+			connection2(id, sex, pw, name);
 			card.show(getContentPane(), "LOGIN"); // 다시 로그인 화면으로 넘어감
 		}
 		
@@ -206,7 +206,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			if (msg.length() < 1)
 				return;
 			try {
-				out.write((Function.WAITCHAT + "|" + msg + "\n").getBytes());
+				out.write((Function.CHATTING + "|" + msg + "\n").getBytes());
 			} catch (Exception ex) {
 			}
 			wr.tf.setText("");
@@ -235,7 +235,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 						card.show(getContentPane(), "WR");
 						break;
 					}
-					case Function.WAITCHAT: {
+					case Function.CHATTING: {
 						wr.bar.setValue(wr.bar.getMaximum());
 						wr.ta.append(st.nextToken() + "\n");
 					}
