@@ -87,8 +87,8 @@ public class Server implements Runnable {
 
 					switch (protocol) {
 					// LogIn|Id|password
-					
-						// 로그인처리
+
+					// 로그인처리
 					case (Function.LOGIN): {
 						// 데이터 값 받기
 						id = st.nextToken();
@@ -115,17 +115,17 @@ public class Server implements Runnable {
 						}
 					}
 						break;
-						
-						//로그아웃 처리
+
+					// 로그아웃 처리
 					case (Function.LOGOUT): {
 						id = st.nextToken();
 						messageAll(Function.ANOTHER_LOGOUT + "|" + id);
 						System.out.println(" LOGOUT " + id);
-						
+
 					}
 						break;
-						
-						// 회원가입 처리
+
+					// 회원가입 처리
 					case (Function.SIGNUP): {
 						id = st.nextToken();
 						password = st.nextToken();
@@ -144,26 +144,25 @@ public class Server implements Runnable {
 						}
 					}
 						break;
-						
-						// 채팅받고 보내기
+
+					// 채팅받고 보내기
 					case Function.CHATTING: {
 						id = st.nextToken();
 						msg = st.nextToken();
-						
+
 						// 채팅보낸사람의 위치 확인
 						for (Client user : waitVc) {
-							if(id.equals(user.id)) {
+							if (id.equals(user.id)) {
 								pos = user.pos;
 							}
 						}
-						
+
 						// 위치가 같은사람에게 메세지 보내기
 						for (Client user : waitVc) {
-							if(pos.equals(user.pos)) {
-								user.messageTo(Function.CHATTING + "|" + msg);
+							if (pos.equals(user.pos)) {
+								user.messageTo(Function.CHATTING + "|" + id + "|" + msg);
 							}
 						}
-						messageAll(Function.CHATTING + st.nextToken() + st.nextToken());
 					}
 						break;
 
@@ -184,7 +183,7 @@ public class Server implements Runnable {
 			try {
 				out.write((msg + "\n").getBytes()); // 데이터를 1명한테만 보내는 거
 				// 인코딩 ==> 디코딩
-			} catch (Exception ex) {
+			} catch (Exception e) {
 			}
 		}
 
@@ -194,7 +193,7 @@ public class Server implements Runnable {
 				for (Client user : waitVc) {
 					user.messageTo(msg);
 				}
-			} catch (Exception ex) {
+			} catch (Exception e) {
 			}
 		}
 	}
