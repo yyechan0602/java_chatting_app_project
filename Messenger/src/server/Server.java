@@ -62,7 +62,8 @@ public class Server implements Runnable {
 		BufferedReader in;
 		// 요청을 처리한 다음에 결과를 응답
 		OutputStream out;
-		String id, password, name, sex;
+		String id, password, name, sex, pos;
+		Boolean online = false;
 
 		public Client(Socket s) {
 			try {
@@ -86,34 +87,46 @@ public class Server implements Runnable {
 
 					switch (protocol) {
 					// LogIn|Id|password
+
+					// 로그인처리
 					case (Function.LOGIN): {
-						// 로그인처리
 						// 데이터 값 받기
 						id = st.nextToken();
 						password = st.nextToken();
 						if (db.LogIn(id, password)) {
 							name = db.getName(id);
 							sex = db.getSex(id);
-							// 접속한 모든 사용자 => 로그인한 정보를 보내준다
+							pos = "0";
+							online = true;
+							// 접속한 모든 사용자 => 로그인한 사람의 정보를 보내준다
 							messageAll(Function.ANOTHER_LOGIN + "|" + id + "|" + name + "|" + sex);
 							// 접속한 사람의 정보를 저장
 							waitVc.add(this);
 							// 로그인창에서 => 대기창으로 변경
 							messageTo(Function.PERMIT_LOGIN + "|" + id);
-							// 회원 목록 추가
+							// 로그인한 사람에게 다른 회원 목록 보내주기
 							for (Client user : waitVc) {
 								System.out.println(Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
 								messageTo(Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
 							}
-							// 로그인창에서 => 대기창으로 변경
-							System.out.println(id + "로그인");
+							System.out.println(" LOGIN " + id);
 						} else {
 							// 로그인 거절
 							messageTo(Function.REJECT_LOGIN + "|" + id);
 						}
 					}
 						break;
-						
+
+					// 로그아웃 처리
+					case (Function.LOGOUT): {
+						id = st.nextToken();
+						messageAll(Function.ANOTHER_LOGOUT + "|" + id);
+						System.out.println(" LOGOUT " + id);
+
+					}
+						break;
+
+					// 회원가입 처리
 					case (Function.SIGNUP): {
 						id = st.nextToken();
 						password = st.nextToken();
@@ -125,20 +138,39 @@ public class Server implements Runnable {
 							// 회원가입 성공!
 							messageTo(Function.PERMIT_SIGNUP + "|" + id);
 
-							System.out.println(id + "회원가입");
+							System.out.println(" 회원가입 " + id);
 						} else {
 							// 회원가입 거절
 							messageTo(Function.REJECT_SIGNUP + "|" + id);
 						}
 					}
-					
-					case Function.WAITCHAT: {
-						messageAll(Function.WAITCHAT + "|[" + name + "] " + st.nextToken());
+						break;
+
+					// 채팅받고 보내기
+					case Function.CHATTING: {
+						id = st.nextToken();
+						msg = st.nextToken();
+
+						// 채팅보낸사람의 위치 확인
+						for (Client user : waitVc) {
+							if (id.equals(user.id)) {
+								pos = user.pos;
+							}
+						}
+
+						// 위치가 같은사람에게 메세지 보내기
+						for (Client user : waitVc) {
+							if (pos.equals(user.pos)) {
+								user.messageTo(Function.CHATTING + "|" + id + "|" + msg);
+							}
+						}
 					}
+						break;
+
 					}
 				}
 			} catch (Exception e) {
-				
+
 			}
 
 		}
@@ -152,7 +184,7 @@ public class Server implements Runnable {
 			try {
 				out.write((msg + "\n").getBytes()); // 데이터를 1명한테만 보내는 거
 				// 인코딩 ==> 디코딩
-			} catch (Exception ex) {
+			} catch (Exception e) {
 			}
 		}
 
@@ -162,7 +194,7 @@ public class Server implements Runnable {
 				for (Client user : waitVc) {
 					user.messageTo(msg);
 				}
-			} catch (Exception ex) {
+			} catch (Exception e) {
 			}
 		}
 	}

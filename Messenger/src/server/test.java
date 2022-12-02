@@ -3,7 +3,7 @@ package server;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class test{
+public class test {
 	public static void main(String[] args) {
 		Database db = null;
 		db = new Database();
