@@ -112,7 +112,7 @@ public class Server implements Runnable {
 						}
 					}
 						break;
-						
+
 					case (Function.SIGNUP): {
 						id = st.nextToken();
 						password = st.nextToken();
@@ -130,14 +130,14 @@ public class Server implements Runnable {
 							messageTo(Function.REJECT_SIGNUP + "|" + id);
 						}
 					}
-					
+
 					case Function.WAITCHAT: {
 						messageAll(Function.WAITCHAT + "|[" + name + "] " + st.nextToken());
 					}
 					}
 				}
 			} catch (Exception e) {
-				
+
 			}
 
 		}

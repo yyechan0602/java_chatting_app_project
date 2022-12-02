@@ -18,8 +18,8 @@ public class Database {
 	ResultSet rs = null;
 	boolean result = false;
 	String resultStr = null;
-	
-	public Database(){
+
+	public Database() {
 		try {
 			Class.forName(DRIVER_CLASS);
 			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -66,6 +66,7 @@ public class Database {
 			System.out.println(e.getMessage());
 		}
 	}
+
 	public boolean SignUp(String id) {
 		String sql = ("select id from clients where id = '" + id + "';");
 		try {
@@ -80,7 +81,7 @@ public class Database {
 		}
 		return result;
 	}
-	
+
 	public boolean LogIn(String id, String password) {
 		String sql = ("select password from clients where id = '" + id + "';");
 		try {
@@ -100,7 +101,7 @@ public class Database {
 		}
 		return result;
 	}
-	
+
 	public String getName(String id) {
 		String sql = ("select name from clients where id = '" + id + "';");
 		try {
@@ -112,7 +113,7 @@ public class Database {
 		}
 		return resultStr;
 	}
-	
+
 	public String getSex(String id) {
 		String sql = ("select sex from clients where id = '" + id + "';");
 		try {
