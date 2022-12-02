@@ -1,0 +1,30 @@
+create database chatting;
+
+use chatting;
+
+create table clients(
+id varchar(50) not null,
+password varchar(50) not null,
+name varchar(50) not null,
+sex varchar(10) not null,
+pos int default 0 not null,
+primary key(id)
+);
+
+insert into clients values('yeom', '1234', 'yechan', 'male');
+insert into clients values('lee', '5678', 'seulin', 'male');
+
+create table chat_room(
+room_id int not null auto_increment,
+public varchar(10) default ('public'),
+number_of_people int default 1,
+primary key(room_id)
+);
+
+
+create table chat_log(
+id int not null auto_increment,
+room_id int not null,
+msg varchar(500) not null,
+primary key(id)
+);
