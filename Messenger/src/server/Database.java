@@ -9,11 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Database {
-	private String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
-	private String URL = "jdbc:mysql://localhost:3306/chatting";
+	private String DRIVER_CLASS = "org.mariadb.jdbc.Driver";
+	private String URL = "jdbc:mariadb://localhost:3307/chatting";
 
 	private String USERNAME = "root";
-	private String PASSWORD = "seulin001024*";
+	private String PASSWORD = "qwe123";
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet rs = null;
@@ -51,7 +51,8 @@ public class Database {
 	}
 
 	public void insert_client(String id, String password, String name, String sex) {
-		String sql = ("insert into clients values('" + id + "', '" + password + "', '" + name + "', '" + sex + "');");
+		String sql = ("insert into clients(id, password, name, sex) values('" + id + "', '" + password + "', '" + name + "', '" + sex + "');");
+		System.out.println(sql);
 		try {
 			stmt.executeUpdate(sql);
 		} catch (SQLException e) {

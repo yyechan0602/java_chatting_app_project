@@ -78,7 +78,6 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		}
 		// 연결이 되면 지시를 받는다
 		new Thread(this).start();
-
 	}
 
 	// 회원가입 연결

@@ -94,8 +94,8 @@ public class Server implements Runnable {
 						id = st.nextToken();
 						password = st.nextToken();
 						if (db.LogIn(id, password)) {
-							name = db.getName(id);
 							sex = db.getSex(id);
+							name = db.getName(id);
 							pos = "0";
 							online = true;
 							// 접속한 모든 사용자 => 로그인한 사람의 정보를 보내준다
