@@ -9,7 +9,7 @@ public class WaitRoom extends JPanel {
     DefaultTableModel model1, model2;
     JTextField tf;
     JTextArea ta;
-    JButton b1, b2, b3, b4, b5, b6;
+    JButton b7,b8,b9,b10;
     JScrollBar bar;
  
     public WaitRoom() {
@@ -20,7 +20,7 @@ public class WaitRoom extends JPanel {
         table1 = new JTable(model1);
         JScrollPane js1 = new JScrollPane(table1);
  
-        String[] col2 = { "ID", "성별", "비밀번호" };
+        String[] col2 = { "ID", "성별", "이름" };
         String[][] row2 = new String[0][2];
  
         model2 = new DefaultTableModel(row2, col2);
@@ -34,10 +34,10 @@ public class WaitRoom extends JPanel {
  
         tf = new JTextField();
  
-        b1 = new JButton("방 만들기");
-        b2 = new JButton("입장하기");
-        b3 = new JButton("옵션");
-        b4 = new JButton("로그아웃");
+        b7 = new JButton("방 만들기");
+        b8 = new JButton("입장하기");
+        b9 = new JButton("옵션");
+        b10 = new JButton("로그아웃");
         //b5 = new JButton("일대일게임");
         //b6 = new JButton("나가기");
  
@@ -56,10 +56,10 @@ public class WaitRoom extends JPanel {
  
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(3, 2, 5, 5));
-        p.add(b1);
-        p.add(b2);
-        p.add(b3);
-        p.add(b4);
+        p.add(b7);
+        p.add(b8);
+        p.add(b9);
+        p.add(b10);
        // p.add(b5);
         //p.add(b6);
  

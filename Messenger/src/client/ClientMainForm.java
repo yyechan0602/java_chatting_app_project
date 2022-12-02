@@ -51,10 +51,10 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		su.b4.addActionListener(this);
 
 		wr.tf.addActionListener(this);
-		wr.b1.addActionListener(this);
-		wr.b2.addActionListener(this);
-		wr.b3.addActionListener(this);
-		wr.b4.addActionListener(this);
+		wr.b7.addActionListener(this);
+		wr.b8.addActionListener(this);
+		wr.b9.addActionListener(this);
+		wr.b10.addActionListener(this);
 		
 		cr.b5.addActionListener(this);
 		cr.b6.addActionListener(this);
@@ -65,7 +65,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	}
 
 	// 로그인 연결
-	public void connection1(String id, String pw, String sex) {
+	public void login(String id, String pw, String sex) {
 		// 서버연결 => 로그인 요청
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
@@ -82,14 +82,14 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	}
 
 	// 회원가입 연결
-	public void connection2(String id, String sex, String pw, String name) {
+	public void sign_up(String id, String sex, String pw, String name) {
 		// 서버연결 => 회원가입 요청
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
 			// 연결이 되면 회원가입 요청
-			out.write((Function.MAKEROOM + "|" + id + "|" + sex + "|" + pw + "|" + name + "\n").getBytes());
+			out.write((Function.SIGNUP + "|" + id + "|" + sex + "|" + pw + "|" + name + "\n").getBytes());
 		} catch (Exception ex) {
 		}
 		// 연결이 되면 지시를 받는다
@@ -97,14 +97,15 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 
 	}
 	
-	public void connection3(String RoomName, String open, String num)
+	// 방 생성 
+	public void makeroom(String RoomName, String open, String num)
 	{
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
 			
-			out.write((Function.SIGNUP + "|" + RoomName + "|" + open + "|" + num + "\n").getBytes());
+			out.write((Function.MAKEROOM + "|" + RoomName + "|" + open + "|" + num + "\n").getBytes());
 		} catch (Exception ex) {
 		}
 		// 연결이 되면 지시를 받는다
@@ -122,7 +123,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 				sex = "남자";
 			else
 				sex = "여자";
-			connection1(id, pw, sex);
+			login(id, pw, sex);
 		}
 
 		// 회원가입 버튼
@@ -148,12 +149,12 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			else
 				sex = "여자";
 			String name = su.tf2.getText();
-			connection2(id, sex, pw, name);
+			sign_up(id, sex, pw, name);
 			card.show(getContentPane(), "LOGIN"); // 다시 로그인 화면으로 넘어감
 		}
 		
 		// 방 만들기 
-		else if (e.getSource() == wr.b1) {
+		else if (e.getSource() == wr.b7) {
 			card.show(getContentPane(), "CR");
 			j1.setVisible(true);
 			
@@ -174,7 +175,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 				if (cr.radio[i].isSelected())
 					num = Integer.toString(i+1);
 			}
-			connection3(RoomName, open, num);
+			makeroom(RoomName, open, num);
 			
 			j1.setVisible(false);
 			cr.tf.setText("");
@@ -186,17 +187,17 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		}
 		
 		// 입장하기 
-		else if (e.getSource() == wr.b2) {
+		else if (e.getSource() == wr.b8) {
 			
 		}
 		
 		// 옵션
-		else if (e.getSource() == wr.b3) {
+		else if (e.getSource() == wr.b9) {
 			
 		}
 		
 		// 로그아웃 
-		else if (e.getSource() == wr.b4) {
+		else if (e.getSource() == wr.b10) {
 			card.show(getContentPane(), "LOGIN");
 		}
 		
