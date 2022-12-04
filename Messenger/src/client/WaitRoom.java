@@ -12,7 +12,8 @@ public class WaitRoom extends JPanel {
     JButton b7,b8,b9,b10;
     JScrollBar bar;
     String[][] row1 = null;
- 
+    String[][] row2 = null;
+    
     public WaitRoom() {
         String[] col1 = { "방이름", "공개/비공개", "인원" };
         row1 = new String[0][3];
@@ -22,7 +23,7 @@ public class WaitRoom extends JPanel {
         JScrollPane js1 = new JScrollPane(table1);
  
         String[] col2 = { "ID", "성별", "이름" };
-        String[][] row2 = new String[0][2];
+        row2 = new String[0][2];
  
         model2 = new DefaultTableModel(row2, col2);
         table2 = new JTable(model2);
@@ -72,11 +73,10 @@ public class WaitRoom extends JPanel {
     }
     
     public void erase_members() {
-    	/*
+    	System.out.println(model2.getRowCount());
     	for (int i=0;i<model2.getRowCount(); i++) {
 			model2.removeRow(0);
 		}
-		*/
-        row1 = new String[0][3];
+    	
     }
 }

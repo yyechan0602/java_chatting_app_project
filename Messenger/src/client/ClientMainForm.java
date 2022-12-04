@@ -229,10 +229,12 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		try {
 			while (true) {
 				String msg = in.readLine();
-				System.out.println("==============");
 				System.out.println(msg);
 				StringTokenizer st = new StringTokenizer(msg, "|");
 				int protocol = Integer.parseInt(st.nextToken());
+				if (protocol != Function.MEMBERS) {
+					System.out.println("=============");
+				}
 				switch (protocol) {
 					// 다른사람이 로그인
 					case Function.MEMBERS: {
