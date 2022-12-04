@@ -20,6 +20,8 @@ public class Function {
 	// 채팅방 목록기능
 	public static final int ENTERROOM = 130;
 	public static final int MAKEROOM = 131;
+	public static final int PERMIT_MAKE_ROOM = 132;
+	public static final int REJECT_MAKE_ROOM = 133;
 
 	// 채팅방 기능
 	public static final int EXITROOM = 140;

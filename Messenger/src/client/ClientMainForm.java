@@ -30,6 +30,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	OutputStream out; // 송신
 
 	public ClientMainForm() {
+
 		setLayout(card);
 		add("LOGIN", login);
 		add("WR", wr);
@@ -87,12 +88,11 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
-			// 연결이 되면 회원가입 요청
+			
 			out.write((Function.SIGNUP + "|" + id + "|" + pw + "|" + name + "|" + sex + "\n").getBytes());
 		} catch (Exception ex) {
 		}
 		// 연결이 되면 지시를 받는다
-		new Thread(this).start();
 
 	}
 	
@@ -100,28 +100,17 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	public void makeroom(String RoomName, String open, String num)
 	{
 		try {
-			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
-			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			out = s.getOutputStream();
-			
 			out.write((Function.MAKEROOM + "|" + RoomName + "|" + open + "|" + num + "\n").getBytes());
 		} catch (Exception ex) {
 		}
-		// 연결이 되면 지시를 받는다
-		new Thread(this).start();
 	}
 	
 	// 로그아웃 
 	public void logout(String id, String pw)
 	{
 		try {
-			s = new Socket("localhost",1120);
-			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			out = s.getOutputStream();
-			
 			out.write((Function.LOGOUT + "|" + id + "|" + pw + "\n").getBytes());
 		} catch (Exception ex) {
-			new Thread(this).start();
 		}
 	}
 	

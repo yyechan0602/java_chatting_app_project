@@ -18,7 +18,7 @@ public class Server implements Runnable {
 	private Vector<Client> waitVc = new Vector<Client>();
 	Database db = null;
 
-	String room_id, isPublic, number_of_people;
+	String room_id, isPublic, number_Of_People;
 	// 쓰레드에서 동기화 프로그램
 
 	// 서버 가동
@@ -119,8 +119,8 @@ public class Server implements Runnable {
 							// 로그인 거절
 							messageTo(Function.REJECT_LOGIN + "|" + id);
 						}
-					}
 						break;
+					}
 
 					// 로그아웃 처리
 					case (Function.LOGOUT): {
@@ -132,9 +132,8 @@ public class Server implements Runnable {
 						}
 						messageAll(Function.ANOTHER_LOGOUT + "|" + id);
 						System.out.println(" LOGOUT " + id);
-					}
 						break;
-
+					}
 					// 회원가입 처리
 					case (Function.SIGNUP): {
 						id = st.nextToken();
@@ -143,7 +142,7 @@ public class Server implements Runnable {
 						sex = st.nextToken();
 						// 중복 ID 확인
 						if (db.SignUp(id)) {
-							db.insert_client(id, password, name, sex);
+							db.insert_Client(id, password, name, sex);
 							// 회원가입 성공!
 							messageTo(Function.PERMIT_SIGNUP + "|" + id);
 
@@ -152,8 +151,8 @@ public class Server implements Runnable {
 							// 회원가입 거절
 							messageTo(Function.REJECT_SIGNUP + "|" + id);
 						}
-					}
 						break;
+					}
 
 					// 채팅받고 보내기
 					case (Function.CHATTING): {
@@ -173,12 +172,23 @@ public class Server implements Runnable {
 								user.messageTo(Function.CHATTING + "|" + id + "|" + msg);
 							}
 						}
-					}
 						break;
+					}
+
 					case (Function.MAKEROOM): {
 						room_id = st.nextToken();
-						isPublic = st.nextToken();
-						number_of_people = st.nextToken();
+						if (db.can_Make_Room(room_id)) {
+							isPublic = st.nextToken();
+							number_Of_People = st.nextToken();
+							db.make_Room(room_id, isPublic, number_Of_People);
+
+							if (isPublic.equals(st))
+								// 접속한 모든 사용자 => 만들어진 방정보를 보내준다
+								messageAll(Function.ANOTHER_LOGIN + "|" + id + "|" + name + "|" + sex);
+						} else {
+							
+						}
+						break;
 					}
 
 					}

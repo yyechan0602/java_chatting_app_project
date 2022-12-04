@@ -50,7 +50,7 @@ public class Database {
 		}
 	}
 
-	public void insert_client(String id, String password, String name, String sex) {
+	public void insert_Client(String id, String password, String name, String sex) {
 		String sql = ("insert into clients(id, password, name, sex) values('" + id + "', '" + password + "', '" + name + "', '" + sex + "');");
 		System.out.println(sql);
 		try {
@@ -59,8 +59,33 @@ public class Database {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public boolean can_Make_Room(String room_id) {
+		String sql = ("select room_id from chat_room where room_id = '" + room_id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			if (!rs.next()) {
+				result = true;
+			} else {
+				result = false;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+	
+	public void make_Room(String room_id, String isPublic, String number_Of_People) {
+		String sql = ("insert into chat_room(room_id, isPublic, number_Of_People) values('" + room_id + "', '" + isPublic + "', " + number_Of_People + ");");
+		System.out.println(sql);
+		try {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
-	public void delete_client(String id) {
+	public void delete_Client(String id) {
 		String sql = ("delete from clients where id = '" + id + "';");
 		try {
 			stmt.executeUpdate(sql);
@@ -117,6 +142,18 @@ public class Database {
 	}
 
 	public String getSex(String id) {
+		String sql = ("select sex from clients where id = '" + id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			resultStr = rs.getString("sex");
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return resultStr;
+	}
+	
+	public String getRoom_Id(String id) {
 		String sql = ("select sex from clients where id = '" + id + "';");
 		try {
 			rs = stmt.executeQuery(sql);
