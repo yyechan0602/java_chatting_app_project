@@ -111,6 +111,20 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		new Thread(this).start();
 	}
 	
+	// 로그아웃 
+	public void logout(String id, String pw)
+	{
+		try {
+			s = new Socket("localhost",1120);
+			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			out = s.getOutputStream();
+			
+			out.write((Function.LOGOUT + "|" + id + "|" + pw + "\n").getBytes());
+		} catch (Exception ex) {
+			new Thread(this).start();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// 로그인 버튼
@@ -197,6 +211,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		
 		// 로그아웃 
 		else if (e.getSource() == wr.b10) {
+			String id = login.tf.getText();
+			String pw = login.pf.getText();
+			logout(id,pw);
 			card.show(getContentPane(), "LOGIN");
 		}
 		
