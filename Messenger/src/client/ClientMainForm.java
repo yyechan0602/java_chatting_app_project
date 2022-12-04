@@ -202,6 +202,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			String id = login.tf.getText();
 			String pw = login.pf.getText();
 			logout(id,pw);
+			for (int i=0;i<wr.model2.getRowCount()+1; i++) {
+				wr.model2.removeRow(i);
+			}
 			card.show(getContentPane(), "LOGIN");
 		}
 		
@@ -247,6 +250,10 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 					case Function.PERMIT_MAKE_ROOM:{
 						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
 						wr.model1.addRow(data2);
+						break;
+					}
+					case Function.REJECT_MAKE_ROOM:{
+						err()
 						break;
 					}
 				}
