@@ -84,7 +84,7 @@ public class Server implements Runnable {
 					StringTokenizer st = new StringTokenizer(msg, "|");
 					int protocol = Integer.parseInt(st.nextToken());
 					// function|id|대화명|성별
-
+					System.out.println(protocol);
 					switch (protocol) {
 					// LogIn|Id|password
 
@@ -94,8 +94,8 @@ public class Server implements Runnable {
 						id = st.nextToken();
 						password = st.nextToken();
 						if (db.LogIn(id, password)) {
-							sex = db.getSex(id);
 							name = db.getName(id);
+							sex = db.getSex(id);
 							pos = "0";
 							online = true;
 							// 접속한 모든 사용자 => 로그인한 사람의 정보를 보내준다

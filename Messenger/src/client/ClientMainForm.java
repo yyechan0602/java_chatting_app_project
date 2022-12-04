@@ -88,7 +88,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
 			// 연결이 되면 회원가입 요청
-			out.write((Function.SIGNUP + "|" + id + "|" + sex + "|" + pw + "|" + name + "\n").getBytes());
+			out.write((Function.SIGNUP + "|" + id + "|" + pw + "|" + name + "|" + sex + "\n").getBytes());
 		} catch (Exception ex) {
 		}
 		// 연결이 되면 지시를 받는다
@@ -222,7 +222,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 				String msg = in.readLine();
 				StringTokenizer st = new StringTokenizer(msg, "|");
 				int protocol = Integer.parseInt(st.nextToken());
-
+				System.out.println(protocol);
 				switch (protocol) {
 					case Function.ANOTHER_LOGIN: {
 						String[] data = { st.nextToken(), st.nextToken(), st.nextToken()};
