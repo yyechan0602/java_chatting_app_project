@@ -1,6 +1,11 @@
+drop database chatting;
 create database chatting;
 
 use chatting;
+
+drop table clients;
+drop table chat_room;
+drop table chat_log;
 
 create table clients(
 id varchar(50) not null,

@@ -244,7 +244,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 						wr.bar.setValue(wr.bar.getMaximum());
 						wr.ta.append(st.nextToken() + "\n");
 					}
-					case Function.MAKEROOM:{
+					case Function.PERMIT_MAKE_ROOM:{
 						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
 						wr.model1.addRow(data2);
 						break;
