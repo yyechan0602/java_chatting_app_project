@@ -17,6 +17,8 @@ public class Server implements Runnable {
 	private final int PORT = 1120;
 	private Vector<Client> waitVc = new Vector<Client>();
 	Database db = null;
+
+	String room_id, isPublic, number_of_people;
 	// 쓰레드에서 동기화 프로그램
 
 	// 서버 가동
@@ -81,10 +83,11 @@ public class Server implements Runnable {
 				while (true) {
 					// 클라이언트가 요청한 내용 받는다
 					String msg = in.readLine();
+
+					System.out.println(msg);
 					StringTokenizer st = new StringTokenizer(msg, "|");
 					int protocol = Integer.parseInt(st.nextToken());
 					// function|id|대화명|성별
-
 					switch (protocol) {
 					// LogIn|Id|password
 
@@ -94,8 +97,8 @@ public class Server implements Runnable {
 						id = st.nextToken();
 						password = st.nextToken();
 						if (db.LogIn(id, password)) {
-							sex = db.getSex(id);
 							name = db.getName(id);
+							sex = db.getSex(id);
 							pos = "0";
 							online = true;
 							// 접속한 모든 사용자 => 로그인한 사람의 정보를 보내준다
@@ -106,8 +109,10 @@ public class Server implements Runnable {
 							messageTo(Function.PERMIT_LOGIN + "|" + id);
 							// 로그인한 사람에게 다른 회원 목록 보내주기
 							for (Client user : waitVc) {
-								System.out.println(Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
-								messageTo(Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
+								if (user.online == true) {
+									messageTo(
+											Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
+								}
 							}
 							System.out.println(" LOGIN " + id);
 						} else {
@@ -120,9 +125,13 @@ public class Server implements Runnable {
 					// 로그아웃 처리
 					case (Function.LOGOUT): {
 						id = st.nextToken();
+						for (Client user : waitVc) {
+							if (user.id == id) {
+								user.online = false;
+							}
+						}
 						messageAll(Function.ANOTHER_LOGOUT + "|" + id);
 						System.out.println(" LOGOUT " + id);
-
 					}
 						break;
 
@@ -138,7 +147,7 @@ public class Server implements Runnable {
 							// 회원가입 성공!
 							messageTo(Function.PERMIT_SIGNUP + "|" + id);
 
-							System.out.println(" 회원가입 " + id);
+							System.out.println(" signup " + id);
 						} else {
 							// 회원가입 거절
 							messageTo(Function.REJECT_SIGNUP + "|" + id);
@@ -147,7 +156,7 @@ public class Server implements Runnable {
 						break;
 
 					// 채팅받고 보내기
-					case Function.CHATTING: {
+					case (Function.CHATTING): {
 						id = st.nextToken();
 						msg = st.nextToken();
 
@@ -166,6 +175,11 @@ public class Server implements Runnable {
 						}
 					}
 						break;
+					case (Function.MAKEROOM): {
+						room_id = st.nextToken();
+						isPublic = st.nextToken();
+						number_of_people = st.nextToken();
+					}
 
 					}
 				}

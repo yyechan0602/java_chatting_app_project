@@ -11,8 +11,8 @@ pos int default 0 not null,
 primary key(id)
 );
 
-insert into clients values('yeom', '1234', 'yechan', 'male');
-insert into clients values('lee', '5678', 'seulin', 'male');
+insert into clients(id, password, name, sex) values('yeom', '1234', 'yechan', 'male');
+insert into clients(id, password, name, sex) values('lee', '5678', 'seulin', 'female');
 
 create table chat_room(
 room_id int not null auto_increment,
