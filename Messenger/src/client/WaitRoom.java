@@ -4,8 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import function.Function;
-
 public class WaitRoom extends JPanel {
     JTable table1, table2;
     DefaultTableModel model1, model2;
@@ -67,5 +65,14 @@ public class WaitRoom extends JPanel {
  
         p.setBounds(615, 523, 390, 350);
         add(p);
+        
+        
+        
+    }
+    
+    public void erase_members() {
+    	for (int i=0;i<model2.getRowCount()+1; i++) {
+			model2.removeRow(i);
+		}
     }
 }
