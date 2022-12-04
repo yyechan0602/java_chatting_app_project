@@ -113,7 +113,7 @@ public class Server implements Runnable {
 							System.out.println(" LOGIN " + id);
 						} else {
 							// 로그인 거절
-							messageTo(Function.REJECT_LOGIN + "|" + id);
+							messageTo_Offline(Function.REJECT_LOGIN + "|" + id);
 						}
 						break;
 					}
@@ -148,7 +148,7 @@ public class Server implements Runnable {
 							System.out.println(" signup " + id);
 						} else {
 							// 회원가입 거절
-							messageTo(Function.REJECT_SIGNUP + "|" + id);
+							messageTo_Offline(Function.REJECT_SIGNUP + "|" + id);
 						}
 						break;
 					}
@@ -226,6 +226,18 @@ public class Server implements Runnable {
 				if (online == true) {
 					out.write((msg + "\n").getBytes()); // 데이터를 1명한테만 보내는 거
 				}
+				// 인코딩 ==> 디코딩
+			} catch (Exception e) {
+			}
+		}
+		
+		public synchronized void messageTo_Offline(String msg) {
+			// synchronized
+			/*
+			 * 쓰레드는 default : 비동기화 synchronized => 동기화
+			 */
+			try {
+				out.write((msg + "\n").getBytes()); // 데이터를 1명한테만 보내는 거
 				// 인코딩 ==> 디코딩
 			} catch (Exception e) {
 			}

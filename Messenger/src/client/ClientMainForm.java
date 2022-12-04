@@ -1,11 +1,10 @@
 package client;
 
-import java.awt.*;
 import java.awt.CardLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -24,6 +23,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	GridLayout grid = new GridLayout();
 	JFrame j1 = new JFrame();
 	JFrame j2 = new JFrame();
+
+	error err;
 	
 	// 네트워크
 	Socket s; // 전화기
@@ -31,6 +32,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	OutputStream out; // 송신
 
 	public ClientMainForm() {
+
+		err = new error();
 		setLayout(card);
 		add("LOGIN", login);
 		add("WR", wr);
@@ -89,7 +92,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
-			out.write((Function.LOGIN + "|" + id + "|" + pw + "|" + sex +"\n").getBytes());
+		
 			out.write((Function.SIGNUP + "|" + id + "|" + pw + "|" + name + "|" + sex + "\n").getBytes());
 			// 연결이 되면 로그인 요청
 		} catch (Exception ex) {
@@ -205,7 +208,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			String id = login.tf.getText();
 			String pw = login.pf.getText();
 			logout(id,pw);
-			wr.erase_members();
+			wr.erase_Members();
 			card.show(getContentPane(), "LOGIN");
 		}
 		
@@ -243,7 +246,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 						break;
 					}
 					case Function.RESET_MEMBERS:{
-						wr.erase_members();
+						wr.erase_Members();
 						break;
 					}
 					// 로그인
@@ -255,10 +258,13 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 					
 					// 로그인 거절
 					case Function.REJECT_LOGIN: {
+						err.view("로그인 실패");
+						System.out.println("test");
 						break;
 					}
 					
 					case Function.REJECT_SIGNUP: {
+						err.view("회원가입 실패");
 						break;
 					}
 					
