@@ -84,6 +84,7 @@ public class Server implements Runnable {
 					// 클라이언트가 요청한 내용 받는다
 					String msg = in.readLine();
 
+					System.out.println("==============");
 					System.out.println(msg);
 					StringTokenizer st = new StringTokenizer(msg, "|");
 					int protocol = Integer.parseInt(st.nextToken());
@@ -101,19 +102,14 @@ public class Server implements Runnable {
 							sex = db.getSex(id);
 							pos = "0";
 							online = true;
-							// 접속한 모든 사용자 => 로그인한 사람의 정보를 보내준다
-							messageAll(Function.ANOTHER_LOGIN + "|" + id + "|" + name + "|" + sex);
 							// 접속한 사람의 정보를 저장
 							waitVc.add(this);
 							// 로그인창에서 => 대기창으로 변경
 							messageTo(Function.PERMIT_LOGIN + "|" + id);
-							// 로그인한 사람에게 다른 회원 목록 보내주기
-							for (Client user : waitVc) {
-								if (user.online == true) {
-									messageTo(
-											Function.ANOTHER_LOGIN + "|" + user.id + "|" + user.name + "|" + user.sex);
-								}
-							}
+
+							// 모든 사람에게 접속 멤버 보내기
+							message_Reset_Members();
+							message_Members();
 							System.out.println(" LOGIN " + id);
 						} else {
 							// 로그인 거절
@@ -126,11 +122,14 @@ public class Server implements Runnable {
 					case (Function.LOGOUT): {
 						id = st.nextToken();
 						for (Client user : waitVc) {
-							if (user.id == id) {
+							if (id.equals(user.id)) {
 								user.online = false;
 							}
 						}
-						messageAll(Function.ANOTHER_LOGOUT + "|" + id);
+
+						// 모든 사람에게 접속 멤버 보내기
+						message_Reset_Members();
+						message_Members();
 						System.out.println(" LOGOUT " + id);
 						break;
 					}
@@ -184,10 +183,12 @@ public class Server implements Runnable {
 
 							if (isPublic.equals("공개")) {
 								// 공개이면 접속한 모든 사용자 => 만들어진 방정보를 보내준다
-								messageAll(Function.PERMIT_MAKE_ROOM + "|" + room_id + "|" + isPublic + "|" + "number_Of_People");
+								messageAll(Function.PERMIT_MAKE_ROOM + "|" + room_id + "|" + isPublic + "|"
+										+ number_Of_People);
 							} else {
 								// 비공개이면 만든사람 => 만들어진 방정보를 보내준다
-								messageTo(Function.PERMIT_MAKE_ROOM + "|" + room_id + "|" + isPublic + "|" + "number_Of_People");
+								messageTo(Function.PERMIT_MAKE_ROOM + "|" + room_id + "|" + isPublic + "|"
+										+ number_Of_People);
 							}
 						} else {
 							messageTo(Function.REJECT_MAKE_ROOM + "|" + room_id);
@@ -203,6 +204,18 @@ public class Server implements Runnable {
 
 		}
 
+		public void message_Members() {
+			for (Client user : waitVc) {
+				if (user.online == true) {
+					messageAll(Function.MEMBERS + "|" + user.id + "|" + user.name + "|" + user.sex);
+				}
+			}
+		}
+
+		public void message_Reset_Members() {
+			messageAll(Function.RESET_MEMBERS + "|" + "NA");
+		}
+
 		// 응답처리
 		public synchronized void messageTo(String msg) {
 			// synchronized
@@ -210,7 +223,9 @@ public class Server implements Runnable {
 			 * 쓰레드는 default : 비동기화 synchronized => 동기화
 			 */
 			try {
-				out.write((msg + "\n").getBytes()); // 데이터를 1명한테만 보내는 거
+				if (online == true) {
+					out.write((msg + "\n").getBytes()); // 데이터를 1명한테만 보내는 거
+				}
 				// 인코딩 ==> 디코딩
 			} catch (Exception e) {
 			}

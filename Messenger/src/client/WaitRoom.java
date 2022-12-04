@@ -11,10 +11,11 @@ public class WaitRoom extends JPanel {
     JTextArea ta;
     JButton b7,b8,b9,b10;
     JScrollBar bar;
+    String[][] row1 = null;
  
     public WaitRoom() {
         String[] col1 = { "방이름", "공개/비공개", "인원" };
-        String[][] row1 = new String[0][3];
+        row1 = new String[0][3];
  
         model1 = new DefaultTableModel(row1, col1);
         table1 = new JTable(model1);
@@ -71,8 +72,11 @@ public class WaitRoom extends JPanel {
     }
     
     public void erase_members() {
-    	for (int i=0;i<model2.getRowCount()+1; i++) {
-			model2.removeRow(i);
+    	/*
+    	for (int i=0;i<model2.getRowCount(); i++) {
+			model2.removeRow(0);
 		}
+		*/
+        row1 = new String[0][3];
     }
 }

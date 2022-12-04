@@ -11,17 +11,22 @@ public class Function {
 	public static final int LOGIN = 110;
 	public static final int PERMIT_LOGIN = 111;
 	public static final int REJECT_LOGIN = 112;
-	public static final int ANOTHER_LOGIN = 113;
 
 	// 로그아웃
-	public static final int LOGOUT = 120;
-	public static final int ANOTHER_LOGOUT = 121;
+	public static final int LOGOUT = 115;
+	
+	// 맴버 목록
+	public static final int RESET_MEMBERS = 121;
+	public static final int MEMBERS = 122;
 	
 	// 채팅방 목록기능
 	public static final int ENTERROOM = 130;
 	public static final int MAKEROOM = 131;
 	public static final int PERMIT_MAKE_ROOM = 132;
 	public static final int REJECT_MAKE_ROOM = 133;
+	
+	public static final int RESET_ROOMS = 135;
+	public static final int ROOMS = 136;
 
 	// 채팅방 기능
 	public static final int EXITROOM = 140;

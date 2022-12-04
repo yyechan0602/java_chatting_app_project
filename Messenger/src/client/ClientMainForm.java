@@ -31,7 +31,6 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	OutputStream out; // 송신
 
 	public ClientMainForm() {
-		System.out.println("clients start...");
 		setLayout(card);
 		add("LOGIN", login);
 		add("WR", wr);
@@ -67,6 +66,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		new ClientMainForm();
 	}
 
+	
 	// 로그인 연결
 	public void login(String id, String pw, String sex) {
 		try {
@@ -74,8 +74,10 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
 			out.write((Function.LOGIN + "|" + id + "|" + pw + "|" + sex +"\n").getBytes());
+			System.out.println("clients login...");
 			// 연결이 되면 로그인 요청
 		} catch (Exception ex) {
+			System.out.println("not connected...");
 		}
 		new Thread(this).start();
 	}
@@ -87,12 +89,13 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
-			
+			out.write((Function.LOGIN + "|" + id + "|" + pw + "|" + sex +"\n").getBytes());
 			out.write((Function.SIGNUP + "|" + id + "|" + pw + "|" + name + "|" + sex + "\n").getBytes());
+			// 연결이 되면 로그인 요청
 		} catch (Exception ex) {
+			System.out.println("not connected...");
 		}
-		// 연결이 되면 지시를 받는다
-
+		new Thread(this).start();
 	}
 	
 	// 방 생성 
@@ -202,9 +205,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			String id = login.tf.getText();
 			String pw = login.pf.getText();
 			logout(id,pw);
-			for (int i=0;i<wr.model2.getRowCount()+1; i++) {
-				wr.model2.removeRow(i);
-			}
+			wr.erase_members();
 			card.show(getContentPane(), "LOGIN");
 		}
 		
@@ -228,24 +229,41 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		try {
 			while (true) {
 				String msg = in.readLine();
+				System.out.println("==============");
 				System.out.println(msg);
 				StringTokenizer st = new StringTokenizer(msg, "|");
 				int protocol = Integer.parseInt(st.nextToken());
 				switch (protocol) {
-					case Function.ANOTHER_LOGIN: {
+					// 다른사람이 로그인
+					case Function.MEMBERS: {
 						String[] data = { st.nextToken(), st.nextToken(), st.nextToken()};
-						//System.out.println(data);
 						wr.model2.addRow(data);
 						break;
 					}
+					case Function.RESET_MEMBERS:{
+						wr.erase_members();
+						break;
+					}
+					// 로그인
 					case Function.PERMIT_LOGIN: {
 						setTitle(st.nextToken());
 						card.show(getContentPane(), "WR");
 						break;
 					}
+					
+					// 로그인 거절
+					case Function.REJECT_LOGIN: {
+						break;
+					}
+					
+					case Function.REJECT_SIGNUP: {
+						break;
+					}
+					
 					case Function.CHATTING: {
 						wr.bar.setValue(wr.bar.getMaximum());
 						wr.ta.append(st.nextToken() + "\n");
+						break;
 					}
 					case Function.PERMIT_MAKE_ROOM:{
 						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
@@ -253,7 +271,6 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 						break;
 					}
 					case Function.REJECT_MAKE_ROOM:{
-						err()
 						break;
 					}
 				}
