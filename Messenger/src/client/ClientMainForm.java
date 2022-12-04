@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -30,7 +31,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	OutputStream out; // 송신
 
 	public ClientMainForm() {
-
+		System.out.println("clients start...");
 		setLayout(card);
 		add("LOGIN", login);
 		add("WR", wr);
@@ -59,6 +60,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		
 		cr.b5.addActionListener(this);
 		cr.b6.addActionListener(this);
+		
 	}
 
 	public static void main(String[] args) {
@@ -67,17 +69,14 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 
 	// 로그인 연결
 	public void login(String id, String pw, String sex) {
-		// 서버연결 => 로그인 요청
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
-			// 연결이 되면 로그인 요청
 			out.write((Function.LOGIN + "|" + id + "|" + pw + "|" + sex +"\n").getBytes());
-			System.out.println(Function.LOGIN + "|" + id + "|" + pw + "|" + sex +"\n");
+			// 연결이 되면 로그인 요청
 		} catch (Exception ex) {
 		}
-		// 연결이 되면 지시를 받는다
 		new Thread(this).start();
 	}
 
@@ -226,9 +225,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		try {
 			while (true) {
 				String msg = in.readLine();
+				System.out.println(msg);
 				StringTokenizer st = new StringTokenizer(msg, "|");
 				int protocol = Integer.parseInt(st.nextToken());
-				System.out.println(protocol);
 				switch (protocol) {
 					case Function.ANOTHER_LOGIN: {
 						String[] data = { st.nextToken(), st.nextToken(), st.nextToken()};
@@ -247,7 +246,6 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 					}
 					case Function.MAKEROOM:{
 						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
-						System.out.println(data2);
 						wr.model1.addRow(data2);
 						break;
 					}

@@ -182,11 +182,15 @@ public class Server implements Runnable {
 							number_Of_People = st.nextToken();
 							db.make_Room(room_id, isPublic, number_Of_People);
 
-							if (isPublic.equals(st))
-								// 접속한 모든 사용자 => 만들어진 방정보를 보내준다
-								messageAll(Function.ANOTHER_LOGIN + "|" + id + "|" + name + "|" + sex);
+							if (isPublic.equals("공개")) {
+								// 공개이면 접속한 모든 사용자 => 만들어진 방정보를 보내준다
+								messageAll(Function.PERMIT_MAKE_ROOM + "|" + room_id + "|" + isPublic + "|" + "number_Of_People");
+							} else {
+								// 비공개이면 만든사람 => 만들어진 방정보를 보내준다
+								messageTo(Function.PERMIT_MAKE_ROOM + "|" + room_id + "|" + isPublic + "|" + "number_Of_People");
+							}
 						} else {
-							
+							messageTo(Function.REJECT_MAKE_ROOM + "|" + room_id);
 						}
 						break;
 					}

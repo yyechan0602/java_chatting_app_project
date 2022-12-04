@@ -77,7 +77,6 @@ public class Database {
 	
 	public void make_Room(String room_id, String isPublic, String number_Of_People) {
 		String sql = ("insert into chat_room(room_id, isPublic, number_Of_People) values('" + room_id + "', '" + isPublic + "', " + number_Of_People + ");");
-		System.out.println(sql);
 		try {
 			stmt.executeUpdate(sql);
 		} catch (SQLException e) {
