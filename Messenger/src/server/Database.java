@@ -33,7 +33,9 @@ public class Database {
 			System.out.println("DB 연결 실패");
 		}
 	}
-
+	
+	// ===============================  clients 관련 ===========================================
+	
 	public void clients() {
 		String sql = "Select * from clients;";
 		try {
@@ -59,68 +61,6 @@ public class Database {
 			System.out.println(e.getMessage());
 		}
 	}
-	
-	public boolean Exist_Room(String room_id) {
-		String sql = ("select room_id from chat_room where room_id = '" + room_id + "';");
-		try {
-			rs = stmt.executeQuery(sql);
-			if (!rs.next()) {
-				result = false;
-			} else {
-				result = true;
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		return result;
-	}
-	
-	public void make_Room(String room_id, String isPublic, String number_Of_People) {
-		String sql = ("insert into chat_room(room_id, isPublic, number_Of_People) values('" + room_id + "', '" + isPublic + "', " + number_Of_People + ");");
-		try {
-			stmt.executeUpdate(sql);
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	public void show_rooms() {
-		
-	}
-	
-	public boolean enter_Room(String room_id, String id, String password) {
-		String sql = ("select number_Of_People, password from chat_room where room_id = '" + room_id + "';");
-		try {
-			rs = stmt.executeQuery(sql);
-			rs.next();
-			int num_of_people = rs.getInt("number_Of_People");
-			String room_password = rs.getString("password");
-			System.out.println("방인원 " + num_of_people + "   pass  : " + room_password);
-			
-			int current_Number_Of_People = 0;
-			sql = ("select id from chat_room_people where room_id = '" + room_id + "';");
-			rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				rs.getString("id");
-				current_Number_Of_People += 1;
-			}
-			System.out.println(current_Number_Of_People);
-			if (current_Number_Of_People < num_of_people) {
-				sql = ("insert into chat_room_people(room_id, id) values('" + room_id + "', '" + id + "');");
-				System.out.println(sql);
-				stmt.executeUpdate(sql);
-				
-				return true;
-			} else {
-				return false;
-			}
-			
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		return false;
-	}
-	
 	public void delete_Client(String id) {
 		String sql = ("delete from clients where id = '" + id + "';");
 		try {
@@ -188,16 +128,103 @@ public class Database {
 		}
 		return resultStr;
 	}
+
+	// ===============================  방 관련 ===========================================
+	public boolean Exist_Room(String room_id) {
+		String sql = ("select room_id from chat_room where room_id = '" + room_id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			if (!rs.next()) {
+				result = false;
+			} else {
+				result = true;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+	
+	public void make_Room(String room_id, String isPublic, String number_Of_People) {
+		String sql = ("insert into chat_room(room_id, isPublic, number_Of_People) values('" + room_id + "', '" + isPublic + "', " + number_Of_People + ");");
+		try {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void show_rooms() {
+		
+	}
 	
 	public String getRoom_Id(String id) {
-		String sql = ("select sex from clients where id = '" + id + "';");
+		String sql = ("select room_id from chat_room_people where id = '" + id + "';");
 		try {
 			rs = stmt.executeQuery(sql);
 			rs.next();
-			resultStr = rs.getString("sex");
+			resultStr = rs.getString("room_id");
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		return resultStr;
+	}
+
+	// ===============================  방 멤버 관련 ===========================================
+	public boolean enter_Room(String room_id, String id, String password) {
+		String sql = ("select number_Of_People, password from chat_room where room_id = '" + room_id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			int num_of_people = rs.getInt("number_Of_People");
+			String room_password = rs.getString("password");
+			System.out.println("방인원 " + num_of_people + "   pass  : " + room_password);
+			
+			int current_Number_Of_People = 0;
+			sql = ("select id from chat_room_people where room_id = '" + room_id + "';");
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				if(rs.getString("id").equals(id)) {
+					System.out.println("이미 있는 아이디");
+					return false;
+				}
+				current_Number_Of_People += 1;
+			}
+			System.out.println(current_Number_Of_People);
+			if (current_Number_Of_People < num_of_people && password.equals(room_password)) {
+				sql = ("insert into chat_room_people(room_id, id) values('" + room_id + "', '" + id + "');");
+				System.out.println(sql);
+				stmt.executeUpdate(sql);
+				
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public void go_Out(String id) {
+		String sql = ("delete from chat_room_people where id = '" + id + "';");
+		try {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	// ===============================  채팅 로그 관련 ===========================================
+	
+	public void insert_Chat_Log(String room_id, String id, String msg) {
+		String sql = ("insert into chat_log(room_id, id, msg) values('" + id + "', '" + id + "', '" + msg + "');");
+		System.out.println(sql);
+		try {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

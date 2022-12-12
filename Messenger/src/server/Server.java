@@ -20,7 +20,7 @@ public class Server implements Runnable {
 
 	Database db = null;
 
-	String room_id, isPublic, number_Of_People;
+	String room_id, isPublic, number_Of_People, pos;
 	// 쓰레드에서 동기화 프로그램
 
 	// 서버 가동
@@ -66,7 +66,7 @@ public class Server implements Runnable {
 		BufferedReader in;
 		// 요청을 처리한 다음에 결과를 응답
 		OutputStream out;
-		String id, password, name, sex, pos;
+		String id, password, name, sex;
 		Boolean online = false;
 
 		public Client(Socket s) {
@@ -102,7 +102,6 @@ public class Server implements Runnable {
 						if (db.LogIn(id, password)) {
 							name = db.getName(id);
 							sex = db.getSex(id);
-							pos = "0";
 							online = true;
 							// 접속한 사람의 정보를 저장
 							waitVc.add(this);
@@ -114,6 +113,7 @@ public class Server implements Runnable {
 							message_Members();
 							System.out.println(" LOGIN " + id);
 
+							db.enter_Room("대기방", id, "NA");
 							// 모든 사람에게 현재 방 보내기
 							message_Reset_Rooms();
 							message_Rooms();
@@ -137,6 +137,7 @@ public class Server implements Runnable {
 						// 모든 사람에게 접속 멤버 보내기
 						message_Reset_Members();
 						message_Members();
+						db.go_Out(id);
 						System.out.println(" LOGOUT " + id);
 						break;
 					}
@@ -166,18 +167,15 @@ public class Server implements Runnable {
 						msg = st.nextToken();
 
 						// 채팅보낸사람의 위치 확인
-						for (Client user : waitVc) {
-							if (id.equals(user.id)) {
-								pos = user.pos;
-							}
-						}
-
+						room_id = db.getRoom_Id(id);
+						
 						// 위치가 같은사람에게 메세지 보내기
 						for (Client user : waitVc) {
-							if (pos.equals(user.pos)) {
+							if (db.getRoom_Id(user.id).equals(room_id)) {
 								user.messageTo(Function.CHATTING + "|" + id + "|" + msg);
 							}
 						}
+						db.insert_Chat_Log(room_id, id, msg);
 						break;
 					}
 					// 방만든다는 요청이 들어오면
@@ -213,6 +211,7 @@ public class Server implements Runnable {
 							// 방에 들어갈수 있으면
 							if (db.enter_Room(room_id, id, password)) {
 								messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
+								db.go_Out(id);
 							} else {
 								messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
 							}
@@ -253,8 +252,8 @@ public class Server implements Runnable {
 					password = db.rs.getString("password");
 					isPublic = db.rs.getString("isPublic");
 					number_Of_People = db.rs.getString("number_Of_People");
-					
-					messageAll(Function.ROOMS+ "|" + room_id + "|" + isPublic + "|" + number_Of_People);
+
+					messageAll(Function.ROOMS + "|" + room_id + "|" + isPublic + "|" + number_Of_People);
 				}
 			} catch (SQLException e) {
 				e.getMessage();

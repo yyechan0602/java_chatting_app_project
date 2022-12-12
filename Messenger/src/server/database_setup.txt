@@ -5,7 +5,7 @@ use chatting;
 
 drop table clients;
 drop table chat_room;
-drop table chat_room_people
+drop table chat_room_people;
 drop table chat_log;
 
 create table clients(
@@ -13,7 +13,6 @@ id varchar(50) not null,
 password varchar(50) not null,
 name varchar(50) not null,
 sex varchar(10) not null,
-pos int default 0 not null,
 primary key(id)
 );
 
@@ -28,6 +27,8 @@ number_Of_People int default 1,
 primary key(room_id)
 );
 
+insert into chat_room(room_id, number_Of_People) values('대기방', 1000);
+
 create table chat_room_people(
 room_id varchar(50) not null,
 id varchar(50) not null,
@@ -38,6 +39,7 @@ primary key(room_id)
 create table chat_log(
 id int not null auto_increment,
 room_id int not null,
-msg varchar(500) not null,
+id varchar(50) not null,
+msg varchar(256) not null,
 primary key(id)
 );
