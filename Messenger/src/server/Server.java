@@ -199,6 +199,7 @@ public class Server implements Runnable {
 							// 만든 사람에게 방이 만들어졌다는 메시지 출력
 							messageTo(Function.PERMIT_MAKE_ROOM + "|" + room_id);
 							// 모든 사람의 방 목록 초기화후, 다시 방 목록 보내기
+							
 							message_Reset_Rooms();
 							message_Rooms();
 							

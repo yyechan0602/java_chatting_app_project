@@ -52,7 +52,6 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 		chatting = new Chatting();
 		
 		err = new error();
-		err.setLocation(500, 500);
 		setLayout(card);
 		//add("LOGIN", login);
 		
@@ -241,7 +240,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 			RoomName = cr.tf.getText();
 			String open = "";
 			String num = "";
-			String password = "";
+			String password = "NA";
 
 			for (int i=0; i<cr.radio.length; i++) {
 				if (cr.radio[i].isSelected())
@@ -443,7 +442,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 					
 					// 로그인
 					case Function.PERMIT_LOGIN: {
-						setTitle(st.nextToken());
+						j4.setTitle(st.nextToken() + " 의 채팅앱");
 						j2.setVisible(false);
 						j4.setVisible(true);
 						chatting.setVisible(true);
