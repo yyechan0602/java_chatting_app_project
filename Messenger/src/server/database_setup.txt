@@ -38,7 +38,7 @@ primary key(room_id)
 
 create table chat_log(
 id int not null auto_increment,
-room_id int not null,
+room_id varchar(50) not null,
 id varchar(50) not null,
 msg varchar(256) not null,
 primary key(id)

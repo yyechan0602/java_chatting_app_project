@@ -25,6 +25,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	JFrame j2 = new JFrame();	// 로그인 화면 
 	JFrame j3 = new JFrame();	// 회원가입 화면
 	JFrame j4 = new JFrame(); 	// 대기방 화면 
+	String id;
 	error err;
 	
 	// 네트워크
@@ -138,7 +139,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	public void actionPerformed(ActionEvent e) {
 		// 로그인 버튼
 		if (e.getSource() == login.b1) {
-			String id = login.tf.getText();
+			id = login.tf.getText();
 			String pw = login.pf.getText();
 			String sex = "";
 			if (login.rb1.isSelected())
@@ -235,14 +236,14 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			j4.setVisible(false);
 			//card.show(getContentPane(), "LOGIN");
 		}
-		
+		// 채팅하기
 		else if (e.getSource() == wr.tf) {
 			// 입력된 데이터 읽기
 			String msg = wr.tf.getText();
 			if (msg.length() < 1)
 				return;
 			try {
-				out.write((Function.CHATTING + "|" + msg + "\n").getBytes());
+				out.write((Function.CHATTING + "|" + id  + "|" +  msg + "\n").getBytes());
 			} catch (Exception ex) {
 			}
 			wr.tf.setText("");
@@ -300,11 +301,19 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 						break;
 					}
 					case Function.PERMIT_MAKE_ROOM:{
-						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
-						wr.model1.addRow(data2);
+						err.view("방이 만들어졌습니다.");
 						break;
 					}
 					case Function.REJECT_MAKE_ROOM:{
+						err.view("이미 같은 이름의 방이 있습니다.");
+						break;
+					}
+					case Function.ROOMS: {
+						
+						break;
+					}
+					case Function.RESET_ROOMS:{
+						
 						break;
 					}
 				}
