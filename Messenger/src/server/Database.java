@@ -218,8 +218,8 @@ public class Database {
 
 	// ===============================  채팅 로그 관련 ===========================================
 	
-	public void insert_Chat_Log(String room_id, String id, String msg) {
-		String sql = ("insert into chat_log(room_id, id, msg) values('" + id + "', '" + id + "', '" + msg + "');");
+	public void insert_Chat_Log(String room_id, String user_id, String msg) {
+		String sql = ("insert into chat_log(room_id, user_id, msg) values('" + room_id + "', '" + user_id + "', '" + msg + "');");
 		System.out.println(sql);
 		try {
 			stmt.executeUpdate(sql);
