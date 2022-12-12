@@ -50,7 +50,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 
 	public ClientMainForm() {
 		chatting = new Chatting();
+		
 		err = new error();
+		err.setLocation(500, 500);
 		setLayout(card);
 		//add("LOGIN", login);
 		
@@ -430,6 +432,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 					// 채팅방 입장 
 					case Function.PERMIT_ENTER_ROOM:{
 						err.view("채팅방 입장 성공");
+						chatting.la1.setText(st.nextToken() + "  채팅방");
 						break;
 					}
 					
@@ -468,11 +471,11 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 					case Function.PERMIT_MAKE_ROOM:{
 						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
 						wr.model1.addRow(data2);
-						err.view("방이 만들어졌습니다.");
+						err.view(st.nextToken() + " 방이 만들어졌습니다.");
 						break;
 					}
 					case Function.REJECT_MAKE_ROOM:{
-						err.view("방 생성 실패");
+						err.view(st.nextToken() + " 방 생성 실패");
 						break;
 					}
 				}

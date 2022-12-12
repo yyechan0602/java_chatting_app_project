@@ -184,22 +184,25 @@ public class Database {
 			rs.next();
 			int num_of_people = rs.getInt("number_Of_People");
 			String room_password = rs.getString("password");
-
 			int current_Number_Of_People = 0;
+			
 			sql = ("select id from chat_room_people where room_id = '" + room_id + "';");
 			System.out.println(sql);
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
+				// 아이디가 다른지 체크
 				System.out.println(rs.getString("id"));
 				if (rs.getString("id").equals(id)) {
 					System.out.println("이미 같은 아이디");
+					//  아이디가 같으면 false
 					return false;
 				}
 				current_Number_Of_People += 1;
 			}
+			// 현재인원수가 최대 인원수보다 적고, 패스워드가 같으면 true
 			if (current_Number_Of_People <= num_of_people && password.equals(room_password)) {
 				return true;
-			} else {
+			} else { // 아니면 false
 				System.out.println("비밀번호가 틀리거나, 인원수 부족");
 				return false;
 			}

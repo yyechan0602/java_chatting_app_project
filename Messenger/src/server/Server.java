@@ -114,12 +114,12 @@ public class Server implements Runnable {
 							System.out.println(" LOGIN " + id);
 							
 							// 대기방으로 들어가기
-							if (db.can_Enter_Room("대기방", id, "NA")) {
-								messageTo(Function.PERMIT_ENTER_ROOM + "|" + "대기방");
+							if (!db.can_Enter_Room("대기방", id, "NA")) {
 								db.go_Out(id);
-								db.enter_Room("대기방", id);
 							}
 							
+							messageTo(Function.PERMIT_ENTER_ROOM + "|" + "대기방");
+							db.enter_Room("대기방", id);
 							// 모든 사람에게 현재 방 보내기
 							message_Reset_Rooms();
 							message_Rooms();
