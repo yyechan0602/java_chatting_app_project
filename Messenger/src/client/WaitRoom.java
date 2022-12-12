@@ -1,10 +1,11 @@
 package client;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class WaitRoom extends JPanel {
+public class WaitRoom extends JPanel implements MouseListener{
 	JTable table1, table2;
 	DefaultTableModel model1, model2;
 	JTextField tf;
@@ -14,6 +15,7 @@ public class WaitRoom extends JPanel {
 	String[][] row1 = null;
 	String[][] row2 = null;
 	public static final Color KAKAO_YELLOW = new Color(250,225,0);
+	public int row;
 	
 	public WaitRoom() {
 		setBackground(KAKAO_YELLOW);
@@ -80,5 +82,38 @@ public class WaitRoom extends JPanel {
 		for (int i = 0; i < model2.getRowCount(); i++) {
 			model2.removeRow(0);
 		}
+	}
+	
+	public void erase_rooms() {
+		for (int i=0; i<model1.getRowCount(); i++) {
+			model1.removeRow(0);
+		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		row = table1.getSelectedRow();
+		
+		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
 	}
 }

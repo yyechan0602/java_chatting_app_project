@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class CreateRoom extends JPanel{
+public class CreateRoom extends JPanel {
 
 	private JLabel la1, la2, la3, la4;
 	JTextField tf;
