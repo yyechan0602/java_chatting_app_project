@@ -87,12 +87,12 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 
 	
 	// 로그인 연결
-	public void login(String id, String pw, String sex) {
+	public void login(String id, String pw) {
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = s.getOutputStream();
-			out.write((Function.LOGIN + "|" + id + "|" + pw + "|" + sex +"\n").getBytes());
+			out.write((Function.LOGIN + "|" + id + "|" + pw +"\n").getBytes());
 			System.out.println("clients login...");
 			// 연결이 되면 로그인 요청
 		} catch (Exception ex) {
@@ -102,7 +102,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	}
 
 	// 회원가입 연결
-	public void sign_up(String id, String sex, String pw, String name) {
+	public void sign_up(String id, String pw, String name, String sex) {
 		// 서버연결 => 회원가입 요청
 		try {
 			s = new Socket("localhost", 1120); // localhost=> 본인꺼 , 남들꺼는 남들 IP주소 써야함
@@ -142,11 +142,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			id = login.tf.getText();
 			String pw = login.pf.getText();
 			String sex = "";
-			if (login.rb1.isSelected())
-				sex = "남자";
-			else
-				sex = "여자";
-			login(id, pw, sex);
+			login(id, pw);
 		}
 
 		// 회원가입 버튼
@@ -174,7 +170,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			else
 				sex = "여자";
 			String name = su.tf2.getText();
-			sign_up(id, sex, pw, name);
+			sign_up(id, pw, name, sex);
 			j3.setVisible(false);
 			//card.show(getContentPane(), "LOGIN"); // 다시 로그인 화면으로 넘어감
 		}
@@ -297,7 +293,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 					
 					case Function.CHATTING: {
 						wr.bar.setValue(wr.bar.getMaximum());
-						wr.ta.append(st.nextToken() + "\n");
+						wr.ta.append( " [ " + st.nextToken() + " ] " + st.nextToken() + "\n");
 						break;
 					}
 					case Function.PERMIT_MAKE_ROOM:{
