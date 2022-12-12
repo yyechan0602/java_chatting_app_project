@@ -139,11 +139,15 @@ public class Server implements Runnable {
 								user.online = false;
 							}
 						}
+						db.go_Out(id);
 
 						// 모든 사람에게 접속 멤버 보내기
 						message_Reset_Members();
 						message_Members();
-						db.go_Out(id);
+						
+						message_Reset_Rooms();
+						message_Rooms();
+						
 						System.out.println(" LOGOUT " + id);
 						break;
 					}

@@ -432,6 +432,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 					case Function.PERMIT_ENTER_ROOM:{
 						err.view("채팅방 입장 성공");
 						chatting.la1.setText(st.nextToken() + "  채팅방");
+						chatting.ta.setText("");
 						break;
 					}
 					
