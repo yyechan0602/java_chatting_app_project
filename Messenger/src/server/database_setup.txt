@@ -5,6 +5,7 @@ use chatting;
 
 drop table clients;
 drop table chat_room;
+drop table chat_room_people
 drop table chat_log;
 
 create table clients(

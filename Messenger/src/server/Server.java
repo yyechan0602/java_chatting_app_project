@@ -7,6 +7,7 @@ import java.io.OutputStream;
 //다른 컴퓨터와 연결
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -112,6 +113,11 @@ public class Server implements Runnable {
 							message_Reset_Members();
 							message_Members();
 							System.out.println(" LOGIN " + id);
+
+							// 모든 사람에게 현재 방 보내기
+							message_Reset_Rooms();
+							message_Rooms();
+
 						} else {
 							// 로그인 거절
 							messageTo_Offline(Function.REJECT_LOGIN + "|" + id);
@@ -174,7 +180,7 @@ public class Server implements Runnable {
 						}
 						break;
 					}
-
+					// 방만든다는 요청이 들어오면
 					case (Function.MAKEROOM): {
 						room_id = st.nextToken();
 						if (!db.Exist_Room(room_id)) {
@@ -196,7 +202,7 @@ public class Server implements Runnable {
 						}
 						break;
 					}
-					
+
 					// 방 들어간다는 요청 사항 발생시
 					case (Function.ENTERROOM): {
 						room_id = st.nextToken();
@@ -206,6 +212,8 @@ public class Server implements Runnable {
 							// 방에 들어갈수 있으면
 							if (db.enter_Room(room_id, id)) {
 								messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
+							} else {
+								messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
 							}
 						} else {
 							messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
@@ -219,6 +227,7 @@ public class Server implements Runnable {
 			}
 
 		}
+
 		// 모든사람에게 접속중인 멤버 보내기
 		public void message_Members() {
 			for (Client user : waitVc) {
@@ -227,20 +236,33 @@ public class Server implements Runnable {
 				}
 			}
 		}
-		//모든 멤버 목록 리셋
+
+		// 모든 멤버 목록 리셋
 		public void message_Reset_Members() {
 			messageAll(Function.RESET_MEMBERS + "|" + "NA");
 		}
-		
+
 		// 모든 사람에게 방목록 보내기
-		public void message_ROOMS() {
-			for (Client user : waitVc) {
-				if (user.online == true) {
-					messageAll(Function.ROOMS + "|" + user.id + "|" + user.name + "|" + user.sex);
+		public void message_Rooms() {
+			String sql = ("select room_id, password, isPublic, number_Of_People from chat_room;");
+			try {
+				db.rs = db.stmt.executeQuery(sql);
+				while (db.rs.next()) {
+					room_id = db.rs.getString("room_id");
+					password = db.rs.getString("password");
+					isPublic = db.rs.getString("isPublic");
+					number_Of_People = db.rs.getString("number_Of_People");
+					
+					messageAll(Function.ROOMS+ "|" + room_id + "|" + isPublic + "|" + number_Of_People);
 				}
+			} catch (SQLException e) {
+				e.getMessage();
 			}
+			// messageAll(Function.ROOMS + "|" + user. + "|" + user.name + "|" + user.sex);
+
 		}
-		//모든 사람 방목록 초기화
+
+		// 모든 사람 방목록 초기화
 		public void message_Reset_Rooms() {
 			messageAll(Function.RESET_ROOMS + "|" + "NA");
 		}
