@@ -461,8 +461,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 					}
 					
 					case Function.CHATTING: {
-						wr.bar.setValue(wr.bar.getMaximum());
-						chatting.ta.append(st.nextToken() + "\n");
+						chatting.bar.setValue(chatting.bar.getMaximum());
+						chatting.ta.append(" [ " + st.nextToken() + " ] " + st.nextToken() + "\n");
 						break;
 					}
 					case Function.PERMIT_MAKE_ROOM:{
