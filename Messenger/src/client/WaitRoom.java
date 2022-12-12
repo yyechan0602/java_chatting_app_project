@@ -20,6 +20,7 @@ public class WaitRoom extends JPanel{
 	String[][] row2 = null;
 	public int row;
 	Font font;
+	int flag = 0;
 	
 	public WaitRoom() {
 		setBackground(ClientMainForm.KAKAO_YELLOW);
@@ -93,13 +94,15 @@ public class WaitRoom extends JPanel{
 	}
 
 	public void erase_Members() {
-		for (int i = 0; i < model2.getRowCount(); i++) {
+		flag = model2.getRowCount();
+		for (int i = 0; i < flag; i++) {
 			model2.removeRow(0);
 		}
 	}
 	
 	public void erase_rooms() {
-		for (int i=0; i<model1.getRowCount(); i++) {
+		flag = model1.getRowCount();
+		for (int i=0; i < flag; i++) {
 			model1.removeRow(0);
 		}
 	}

@@ -172,7 +172,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 				System.out.println("공개 ||" +room_id + open + id + password);
 			}
 			else if (open.equals("비공개")){
-				//out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
+				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
 				System.out.println("비공개 ||" +room_id + open + id + password);
 			}
 		} catch (Exception ex) {
@@ -346,6 +346,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 			logout(id,pw);
 			wr.erase_Members();
 			
+			chatting.setVisible(false);
 			j2.setVisible(true);
 			j4.setVisible(false);
 			//card.show(getContentPane(), "LOGIN");
@@ -469,8 +470,6 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 						break;
 					}
 					case Function.PERMIT_MAKE_ROOM:{
-						String[] data2 = {st.nextToken(),st.nextToken(),st.nextToken()};
-						wr.model1.addRow(data2);
 						err.view(st.nextToken() + " 방이 만들어졌습니다.");
 						break;
 					}
