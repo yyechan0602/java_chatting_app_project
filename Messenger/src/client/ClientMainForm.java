@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +27,14 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 	PwEnter pe = new PwEnter();
 	PwEnter pe2 = new PwEnter();
 	String id;
-	String pw;
+	Chatting chatting;
+	public String room_pw = "";
 	int row;
+	String RoomName;
+
+	public static final Color KAKAO_YELLOW = new Color(250,225,0);
+	public static final Color KAKAO_BROWN = new Color(82,55,56);
+	public static final Color KAKAO_WHITE_YELLOW = new Color(250,225,204);
 	
 	JFrame j1 = new JFrame();	// 방 생성 
 	JFrame j2 = new JFrame();	// 로그인 화면 
@@ -42,7 +49,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 	OutputStream out; // 송신
 
 	public ClientMainForm() {
-
+		chatting = new Chatting();
 		err = new error();
 		setLayout(card);
 		//add("LOGIN", login);
@@ -67,7 +74,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 		j1.setSize(300,250);
 		j2.setSize(350,550);
 		j3.setSize(350,200);
-		j4.setSize(1024,950);
+		j4.setSize(440,800);
 		//j5.setSize(200,140);
 		//setSize(1024, 950);
 		j2.setVisible(true);
@@ -83,7 +90,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 		su.b4.addActionListener(this);
 		su.b55.addActionListener(this);
 		
-		wr.tf.addActionListener(this);
+		chatting.tf.addActionListener(this);
 		wr.b7.addActionListener(this);
 		wr.b8.addActionListener(this);
 		wr.b9.addActionListener(this);
@@ -136,10 +143,11 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 	}
 	
 	// 방 생성 
-	public void makeroom(String RoomName, String open, String num)
+	public void makeroom(String RoomName, String password, String open, String num)
 	{
 		try {
-			out.write((Function.MAKEROOM + "|" + RoomName + "|" + open + "|" + num + "\n").getBytes());
+			out.write((Function.MAKEROOM + "|" + RoomName + "|" + password + "|" + open + "|" + num + "\n").getBytes());
+			System.out.println("방 생성 ::" + password);
 		} catch (Exception ex) {
 		}
 	}
@@ -162,8 +170,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
 				System.out.println("공개 ||" +room_id + open + id + password);
 			}
-			else {
-				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
+			else if (open.equals("비공개")){
+				//out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
 				System.out.println("비공개 ||" +room_id + open + id + password);
 			}
 		} catch (Exception ex) {
@@ -228,34 +236,55 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 		
 		// 방 만들기 창에서 방 생성 버튼 
 		else if (e.getSource() == cr.b5) {
-			String RoomName = cr.tf.getText();
+			RoomName = cr.tf.getText();
 			String open = "";
 			String num = "";
-			
-			if (cr.rb1.isSelected())
-				open = "공개";
-			else if (cr.rb2.isSelected()){
-				open = "비공개";
-				pe.view();
-				
-				
-			}
-			
+			String password = "";
+
 			for (int i=0; i<cr.radio.length; i++) {
 				if (cr.radio[i].isSelected())
 					num = Integer.toString(i+1);
 			}
-			makeroom(RoomName, open, num);
+			
+			if (cr.rb1.isSelected()) {
+				open = "공개";
+				makeroom(RoomName, password, open, num);
+			}
+			else if (cr.rb2.isSelected()){
+				open = "비공개";
+				pe.view();
+				
+			
+			}
+			
+			
+			//System.out.println("방 생성 버튼 :: " + RoomName + "|" + room_pw +"|" + open);
+			
 			
 			j1.setVisible(false);
 			cr.tf.setText("");
 			
 		}
 		
+		// 방 생성 비밀번호 확인 버튼 
 		else if (e.getSource() == pe.b11) {
-			pw = pe.tf1.getText();
+			//String RoomName = cr.tf.getText();
+			String open = "비공개";
+			String num = "";
+			String password = pe.tf1.getText();
+			
+			for (int i=0; i<cr.radio.length; i++) {
+				if (cr.radio[i].isSelected())
+					num = Integer.toString(i+1);
+			}
+			System.out.println(password);
+			makeroom(RoomName, password, open, num);
+			
+			//System.out.println("방 시작");
 			pe.no_view();
+			//System.out.println("방 종료");
 		}
+		
 		else if (e.getSource() == pe.b22) {
 			pe.no_view();
 		}
@@ -263,7 +292,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 		else if (e.getSource() == cr.b6) {
 			j1.setVisible(false);
 		}
-		
+//		
 		// 입장하기 
 		else if (e.getSource() == wr.b8) {
 			//int row = wr.row;
@@ -273,9 +302,10 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 			String open = wr.table1.getValueAt(row, 1).toString();
 			
 			String id = login.tf.getText();
-			String password = "NA";
+			String password ="";//= pe.tf1.getText();
 			
 			if (open.equals("비공개")) {
+				pe2.tf1.setText("");
 				pe2.view();
 				
 			}
@@ -287,6 +317,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 			//System.out.println(room_id+open);
 			
 		}
+		
+		// 방 입장 비밀번호 확인 버튼 
 		else if (e.getSource() == pe2.b11) {
 			String room_id = wr.table1.getValueAt(row, 0).toString();
 			String open = wr.table1.getValueAt(row, 1).toString();
@@ -296,6 +328,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 			
 			enterroom(room_id, open, id, pw);
 			pe2.no_view();
+			
 		}
 		else if (e.getSource() == pe2.b22) {
 			pe2.no_view();
@@ -317,16 +350,16 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 			//card.show(getContentPane(), "LOGIN");
 		}
 		// 채팅하기
-		else if (e.getSource() == wr.tf) {
+		else if (e.getSource() == chatting.tf) {
 			// 입력된 데이터 읽기
-			String msg = wr.tf.getText();
+			String msg = chatting.tf.getText();
 			if (msg.length() < 1)
 				return;
 			try {
 				out.write((Function.CHATTING + "|" + id  + "|" +  msg + "\n").getBytes());
 			} catch (Exception ex) {
 			}
-			wr.tf.setText("");
+			chatting.tf.setText("");
 		}
 
 	}
@@ -372,7 +405,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 				}
 				switch (protocol) {
 					// 다른사람이 로그인
-					case Function.MEMBERS: {
+					case Function.MEMBERS: {	
 						String[] data1 = { st.nextToken(), st.nextToken(), st.nextToken()};
 						wr.model2.addRow(data1);
 						break;
@@ -410,6 +443,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 						setTitle(st.nextToken());
 						j2.setVisible(false);
 						j4.setVisible(true);
+						chatting.setVisible(true);
 						//card.show(getContentPane(), "WR");
 						break;
 					}
@@ -428,7 +462,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable, 
 					
 					case Function.CHATTING: {
 						wr.bar.setValue(wr.bar.getMaximum());
-						wr.ta.append(st.nextToken() + "\n");
+						chatting.ta.append(st.nextToken() + "\n");
 						break;
 					}
 					case Function.PERMIT_MAKE_ROOM:{

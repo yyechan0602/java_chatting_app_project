@@ -21,8 +21,6 @@ public class Login extends JPanel{
 	JTextField pf; // default로 잡힌 이유는 다른 클래스에서 사용해야 하기 때문에
 	JButton b1, b2, b3; // default로 잡힌 이유는 다른 클래스에서 사용해야 하기 때문에
 	JRadioButton rb1, rb2;
-	public static final Color KAKAO_YELLOW = new Color(250,225,0);
-	public static final Color KAKAO_BROWN = new Color(82,55,56);
 	private CardLayout card;
 	private GridLayout grid;
 	
@@ -32,7 +30,7 @@ public class Login extends JPanel{
 		//setBackground(KAKAO_YELLOW);
 		
 		JPanel pnlFirst = new JPanel();
-		pnlFirst.setBackground(KAKAO_YELLOW);
+		pnlFirst.setBackground(ClientMainForm.KAKAO_YELLOW);
 		
 		back = Toolkit.getDefaultToolkit().getImage("src/client/kakao_image.png");
 		Icon icon = new ImageIcon(back);
@@ -41,7 +39,7 @@ public class Login extends JPanel{
 		pnlFirst.add(lblImag);
 		
 		JPanel pnlLogin = new JPanel(new GridLayout(2,2,5,5));
-		pnlLogin.setBackground(KAKAO_YELLOW);
+		pnlLogin.setBackground(ClientMainForm.KAKAO_YELLOW);
 		
 		// 로그인 부분 아이디와 아이디 칠 textField
 		la1 = new JLabel("아이디", JLabel.CENTER);
@@ -87,15 +85,15 @@ public class Login extends JPanel{
 
 		b1.setForeground(Color.WHITE);
 		b1.setBorderPainted(false);
-		b1.setBackground(KAKAO_BROWN);
+		b1.setBackground(ClientMainForm.KAKAO_BROWN);
 		
 		b2.setForeground(Color.WHITE);
 		b2.setBorderPainted(false);
-		b2.setBackground(KAKAO_BROWN);
+		b2.setBackground(ClientMainForm.KAKAO_BROWN);
 		
 		b3.setForeground(Color.WHITE);
 		b3.setBorderPainted(false);
-		b3.setBackground(KAKAO_BROWN);
+		b3.setBackground(ClientMainForm.KAKAO_BROWN);
 		
 		pnlFirst.setSize(350,550);
 		JPanel p = new JPanel(); // 패널을 배치하는 이유, 가운데 맞추기 어려워서 패널로 잡아준다
@@ -127,7 +125,6 @@ public class Login extends JPanel{
 //	}
 
 	public static void main(String[] args) {
-		//Login l = new Login(); 
 		
 	}
 }
