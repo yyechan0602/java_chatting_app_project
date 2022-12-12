@@ -88,7 +88,7 @@ public class Database {
 		
 	}
 	
-	public void enter_Room(String room_id, String id) {
+	public boolean enter_Room(String room_id, String id) {
 		String sql = ("select number_Of_People from chat_room where room_id = '" + room_id + "';");
 		try {
 			rs = stmt.executeQuery(sql);
@@ -103,11 +103,21 @@ public class Database {
 				rs.getString("id");
 				current_Number_Of_People += 1;
 			}
-			
+			System.out.println(current_Number_Of_People);
+			if (current_Number_Of_People < num_of_people) {
+				sql = ("insert into chat_room_people(room_id, id) values('" + room_id + "', '" + id + "');");
+				System.out.println(sql);
+				stmt.executeUpdate(sql);
+				
+				return true;
+			} else {
+				return false;
+			}
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+		return false;
 	}
 	
 	public void delete_Client(String id) {

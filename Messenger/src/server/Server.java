@@ -16,7 +16,7 @@ public class Server implements Runnable {
 	private ServerSocket ss;
 	private final int PORT = 1120;
 	private Vector<Client> waitVc = new Vector<Client>();
-	
+
 	Database db = null;
 
 	String room_id, isPublic, number_Of_People;
@@ -197,14 +197,18 @@ public class Server implements Runnable {
 						break;
 					}
 					
+					// 방 들어간다는 요청 사항 발생시
 					case (Function.ENTERROOM): {
 						room_id = st.nextToken();
 						id = st.nextToken();
+						// 방이 존재하고
 						if (db.Exist_Room(room_id)) {
-							db.enter_Room(room_id, id);
-							messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
+							// 방에 들어갈수 있으면
+							if (db.enter_Room(room_id, id)) {
+								messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
+							}
 						} else {
-							messageTo(Function.REJECT_MAKE_ROOM + "|" + room_id);
+							messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
 						}
 						break;
 					}
@@ -215,7 +219,7 @@ public class Server implements Runnable {
 			}
 
 		}
-
+		// 모든사람에게 접속중인 멤버 보내기
 		public void message_Members() {
 			for (Client user : waitVc) {
 				if (user.online == true) {
@@ -223,9 +227,22 @@ public class Server implements Runnable {
 				}
 			}
 		}
-
+		//모든 멤버 목록 리셋
 		public void message_Reset_Members() {
 			messageAll(Function.RESET_MEMBERS + "|" + "NA");
+		}
+		
+		// 모든 사람에게 방목록 보내기
+		public void message_ROOMS() {
+			for (Client user : waitVc) {
+				if (user.online == true) {
+					messageAll(Function.ROOMS + "|" + user.id + "|" + user.name + "|" + user.sex);
+				}
+			}
+		}
+		//모든 사람 방목록 초기화
+		public void message_Reset_Rooms() {
+			messageAll(Function.RESET_ROOMS + "|" + "NA");
 		}
 
 		// 응답처리
@@ -242,7 +259,7 @@ public class Server implements Runnable {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		public synchronized void messageTo_Offline(String msg) {
 			// synchronized
 			/*
