@@ -120,7 +120,7 @@ public class Server implements Runnable {
 
 						} else {
 							// 로그인 거절
-							messageTo_Offline(Function.REJECT_LOGIN + "|" + id);
+							messageTo_Offline(Function.REJECT_LOGIN + "|" + "is_Not_Correct_Error");
 						}
 						break;
 					}
@@ -156,7 +156,7 @@ public class Server implements Runnable {
 							System.out.println(" signup " + id);
 						} else {
 							// 회원가입 거절
-							messageTo_Offline(Function.REJECT_SIGNUP + "|" + id);
+							messageTo_Offline(Function.REJECT_SIGNUP + "|" + "is_Exist_Id_Error");
 						}
 						break;
 					}
@@ -175,22 +175,29 @@ public class Server implements Runnable {
 								user.messageTo(Function.CHATTING + "|" + id + "|" + msg);
 							}
 						}
+						// 채팅로그에 채팅 넣기
 						db.insert_Chat_Log(room_id, id, msg);
 						break;
 					}
 					// 방만든다는 요청이 들어오면
 					case (Function.MAKEROOM): {
 						room_id = st.nextToken();
+						// 방이 존재하는지 확인해서 없으면
 						if (!db.Exist_Room(room_id)) {
+							//방 생성
 							isPublic = st.nextToken();
 							number_Of_People = st.nextToken();
 							db.make_Room(room_id, isPublic, number_Of_People);
 							
+							// 만든 사람에게 방이 만들어졌다는 메시지 출력
 							messageTo(Function.PERMIT_MAKE_ROOM + "|" + room_id);
+							// 모든 사람의 방 목록 초기화후, 다시 방 목록 보내기
 							message_Reset_Rooms();
 							message_Rooms();
+							
+							// 방이 있으면 거절하기
 						} else {
-							messageTo(Function.REJECT_MAKE_ROOM + "|" + room_id);
+							messageTo(Function.REJECT_MAKE_ROOM + "|" + "is_Exist_Room_Error");
 						}
 						break;
 					}
@@ -202,15 +209,17 @@ public class Server implements Runnable {
 						password = st.nextToken();
 						// 방이 존재하고
 						if (db.Exist_Room(room_id)) {
-							// 방에 들어갈수 있으면
+							// 방에 들어갈수 있으면 방 만들기
 							if (db.enter_Room(room_id, id, password)) {
 								messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
 								db.go_Out(id);
 							} else {
-								messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
+								// 방에 사람이 꽉 차면 발생
+								messageTo(Function.REJECT_ENTER_ROOM + "|" + "is_No_More_Space_Error");
 							}
 						} else {
-							messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
+							// 방이 존재하지 않으면 발생
+							messageTo(Function.REJECT_ENTER_ROOM + "|" + "not_Exist_Error");
 						}
 						break;
 					}
@@ -226,14 +235,14 @@ public class Server implements Runnable {
 		public void message_Members() {
 			for (Client user : waitVc) {
 				if (user.online == true) {
-					messageAll(Function.MEMBERS + "|" + user.id + "|" + user.name + "|" + user.sex);
+					messageAll(Function.MEMBERS + "|" + user.id + "|" + user.name + "|" + user.sex + "|" + "Message_Members");
 				}
 			}
 		}
 
-		// 모든 멤버 목록 리셋
+		// 모든 멤버 목록 리셋하기
 		public void message_Reset_Members() {
-			messageAll(Function.RESET_MEMBERS + "|" + "NA");
+			messageAll(Function.RESET_MEMBERS + "|" + "Reset_Members");
 		}
 
 		// 모든 사람에게 방목록 보내기
@@ -247,7 +256,7 @@ public class Server implements Runnable {
 					isPublic = db.rs.getString("isPublic");
 					number_Of_People = db.rs.getString("number_Of_People");
 
-					messageAll(Function.ROOMS + "|" + room_id + "|" + isPublic + "|" + number_Of_People);
+					messageAll(Function.ROOMS + "|" + room_id + "|" + isPublic + "|" + number_Of_People + "|" + "Message_Rooms");
 				}
 			} catch (SQLException e) {
 				e.getMessage();
@@ -256,9 +265,9 @@ public class Server implements Runnable {
 
 		}
 
-		// 모든 사람 방목록 초기화
+		// 모든 사람 방목록 초기화하기
 		public void message_Reset_Rooms() {
-			messageAll(Function.RESET_ROOMS + "|" + "NA");
+			messageAll(Function.RESET_ROOMS + "|" + "Reset_Rooms");
 		}
 
 		// 응답처리
