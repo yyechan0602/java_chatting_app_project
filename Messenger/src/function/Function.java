@@ -21,16 +21,19 @@ public class Function {
 	
 	// 채팅방 목록기능
 	public static final int ENTERROOM = 130;
-	public static final int MAKEROOM = 131;
-	public static final int PERMIT_MAKE_ROOM = 132;
-	public static final int REJECT_MAKE_ROOM = 133;
+	public static final int PERMIT_ENTER_ROOM = 131;
+	public static final int REJECT_ENTER_ROOM = 132;
+			
+	public static final int MAKEROOM = 140;
+	public static final int PERMIT_MAKE_ROOM = 141;
+	public static final int REJECT_MAKE_ROOM = 142;
 	
-	public static final int RESET_ROOMS = 135;
-	public static final int ROOMS = 136;
+	public static final int RESET_ROOMS = 150;
+	public static final int ROOMS = 151;
 
 	// 채팅방 기능
-	public static final int EXITROOM = 140;
-	public static final int INVITE = 141;
+	public static final int EXITROOM = 155;
+	public static final int INVITE = 156;
 
 	// 채팅방의 범위
 	// 1 <= CHATROOM <= 99

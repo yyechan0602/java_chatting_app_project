@@ -60,14 +60,14 @@ public class Database {
 		}
 	}
 	
-	public boolean can_Make_Room(String room_id) {
+	public boolean Exist_Room(String room_id) {
 		String sql = ("select room_id from chat_room where room_id = '" + room_id + "';");
 		try {
 			rs = stmt.executeQuery(sql);
 			if (!rs.next()) {
-				result = true;
-			} else {
 				result = false;
+			} else {
+				result = true;
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -83,7 +83,33 @@ public class Database {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
+	public void show_rooms() {
+		
+	}
+	
+	public void enter_Room(String room_id, String id) {
+		String sql = ("select number_Of_People from chat_room where room_id = '" + room_id + "';");
+		try {
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			int num_of_people = rs.getInt("number_Of_People");
+			System.out.println(num_of_people);
+			
+			int current_Number_Of_People = 0;
+			sql = ("select id from chat_room_people where room_id = '" + room_id + "';");
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				rs.getString("id");
+				current_Number_Of_People += 1;
+			}
+			
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
 	public void delete_Client(String id) {
 		String sql = ("delete from clients where id = '" + id + "';");
 		try {

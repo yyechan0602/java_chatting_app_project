@@ -16,6 +16,7 @@ public class Server implements Runnable {
 	private ServerSocket ss;
 	private final int PORT = 1120;
 	private Vector<Client> waitVc = new Vector<Client>();
+	
 	Database db = null;
 
 	String room_id, isPublic, number_Of_People;
@@ -176,7 +177,7 @@ public class Server implements Runnable {
 
 					case (Function.MAKEROOM): {
 						room_id = st.nextToken();
-						if (db.can_Make_Room(room_id)) {
+						if (!db.Exist_Room(room_id)) {
 							isPublic = st.nextToken();
 							number_Of_People = st.nextToken();
 							db.make_Room(room_id, isPublic, number_Of_People);
@@ -195,7 +196,18 @@ public class Server implements Runnable {
 						}
 						break;
 					}
-
+					
+					case (Function.ENTERROOM): {
+						room_id = st.nextToken();
+						id = st.nextToken();
+						if (db.Exist_Room(room_id)) {
+							db.enter_Room(room_id, id);
+							messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
+						} else {
+							messageTo(Function.REJECT_MAKE_ROOM + "|" + room_id);
+						}
+						break;
+					}
 					}
 				}
 			} catch (Exception e) {

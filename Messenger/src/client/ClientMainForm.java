@@ -21,9 +21,10 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	SignUp su = new SignUp();
 	CreateRoom cr = new CreateRoom();
 	GridLayout grid = new GridLayout();
-	JFrame j1 = new JFrame();
-	JFrame j2 = new JFrame();
-
+	JFrame j1 = new JFrame();	// 방 생성 
+	JFrame j2 = new JFrame();	// 로그인 화면 
+	JFrame j3 = new JFrame();	// 회원가입 화면
+	JFrame j4 = new JFrame(); 	// 대기방 화면 
 	error err;
 	
 	// 네트워크
@@ -35,25 +36,39 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 
 		err = new error();
 		setLayout(card);
-		add("LOGIN", login);
-		add("WR", wr);
-		add("SU",su);
+		//add("LOGIN", login);
+		j4.setLayout(null);
+		j4.add("WR", wr);
+		//add("SU",su);
+			
+		j2.setLayout(grid);
+		j2.add("LOGIN",login);
+		
 		
 		j1.setLayout(grid);
 		j1.add("CR",cr);
 		
-		setSize(1024, 950);
-		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		j3.setLayout(grid);
+		j3.add("SU",su);
 		
 		j1.setSize(300,250);
+		j2.setSize(350,550);
+		j3.setSize(350,200);
+		j4.setSize(1024,950);
+		//setSize(1024, 950);
+		j2.setVisible(true);
+		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		
 		
 		login.b1.addActionListener(this);
 		login.b2.addActionListener(this);
 		login.b3.addActionListener(this);
+		
 		su.b4.addActionListener(this);
-
+		su.b55.addActionListener(this);
+		
 		wr.tf.addActionListener(this);
 		wr.b7.addActionListener(this);
 		wr.b8.addActionListener(this);
@@ -135,7 +150,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 
 		// 회원가입 버튼
 		else if (e.getSource() == login.b2) {
-			card.show(getContentPane(), "SU"); // 회원가입 창으로 넘어감 
+			
+			j3.setVisible(true);
+			//card.show(getContentPane(), "SU"); // 회원가입 창으로 넘어감 
 			su.tf.setText("");
 			su.pf.setText("");
 			su.tf2.setText("");
@@ -143,7 +160,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		
 		// 회원가입 취소 버튼  
 		else if (e.getSource() == login.b3) {
-			setVisible(false);
+			j2.setVisible(false);
 		}
 
 		// 회원가입 창에서 회원가입 완료 버튼
@@ -157,7 +174,12 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 				sex = "여자";
 			String name = su.tf2.getText();
 			sign_up(id, sex, pw, name);
-			card.show(getContentPane(), "LOGIN"); // 다시 로그인 화면으로 넘어감
+			j3.setVisible(false);
+			//card.show(getContentPane(), "LOGIN"); // 다시 로그인 화면으로 넘어감
+		}
+		
+		else if (e.getSource() == su.b55) {
+			j3.setVisible(false);
 		}
 		
 		// 방 만들기 
@@ -209,7 +231,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 			String pw = login.pf.getText();
 			logout(id,pw);
 			wr.erase_Members();
-			card.show(getContentPane(), "LOGIN");
+			j2.setVisible(true);
+			j4.setVisible(false);
+			//card.show(getContentPane(), "LOGIN");
 		}
 		
 		else if (e.getSource() == wr.tf) {
@@ -252,7 +276,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 					// 로그인
 					case Function.PERMIT_LOGIN: {
 						setTitle(st.nextToken());
-						card.show(getContentPane(), "WR");
+						j2.setVisible(false);
+						j4.setVisible(true);
+						//card.show(getContentPane(), "WR");
 						break;
 					}
 					

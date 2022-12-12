@@ -27,6 +27,12 @@ number_Of_People int default 1,
 primary key(room_id)
 );
 
+create table chat_room_people(
+room_id varchar(50) not null,
+id varchar(50) not null,
+primary key(room_id)
+);
+
 
 create table chat_log(
 id int not null auto_increment,

@@ -13,8 +13,11 @@ public class WaitRoom extends JPanel {
 	JScrollBar bar;
 	String[][] row1 = null;
 	String[][] row2 = null;
-
+	public static final Color KAKAO_YELLOW = new Color(250,225,0);
+	
 	public WaitRoom() {
+		setBackground(KAKAO_YELLOW);
+		
 		String[] col1 = { "방이름", "공개/비공개", "인원" };
 		row1 = new String[0][3];
 
@@ -57,6 +60,7 @@ public class WaitRoom extends JPanel {
 		add(tf);
 
 		JPanel p = new JPanel();
+		p.setBackground(KAKAO_YELLOW);
 		p.setLayout(new GridLayout(3, 2, 5, 5));
 		p.add(b7);
 		p.add(b8);
@@ -68,6 +72,8 @@ public class WaitRoom extends JPanel {
 		p.setBounds(615, 523, 390, 350);
 		add(p);
 
+		setSize(1024,950);
+		setVisible(true);
 	}
 
 	public void erase_Members() {
