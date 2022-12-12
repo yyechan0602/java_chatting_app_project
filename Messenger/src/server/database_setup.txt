@@ -22,7 +22,7 @@ insert into clients(id, password, name, sex) values('lee', '5678', 'seulin', 'fe
 
 create table chat_room(
 room_id varchar(50) not null,
-password varchar(10) default '0',
+password varchar(10) default 'NA',
 isPublic varchar(10) default ('공개'),
 number_Of_People int default 1,
 primary key(room_id)

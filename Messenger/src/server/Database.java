@@ -88,13 +88,14 @@ public class Database {
 		
 	}
 	
-	public boolean enter_Room(String room_id, String id) {
-		String sql = ("select number_Of_People from chat_room where room_id = '" + room_id + "';");
+	public boolean enter_Room(String room_id, String id, String password) {
+		String sql = ("select number_Of_People, password from chat_room where room_id = '" + room_id + "';");
 		try {
 			rs = stmt.executeQuery(sql);
 			rs.next();
 			int num_of_people = rs.getInt("number_Of_People");
-			System.out.println(num_of_people);
+			String room_password = rs.getString("password");
+			System.out.println("방인원 " + num_of_people + "   pass  : " + room_password);
 			
 			int current_Number_Of_People = 0;
 			sql = ("select id from chat_room_people where room_id = '" + room_id + "';");

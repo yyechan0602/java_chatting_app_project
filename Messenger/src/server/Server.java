@@ -207,10 +207,11 @@ public class Server implements Runnable {
 					case (Function.ENTERROOM): {
 						room_id = st.nextToken();
 						id = st.nextToken();
+						password = st.nextToken();
 						// 방이 존재하고
 						if (db.Exist_Room(room_id)) {
 							// 방에 들어갈수 있으면
-							if (db.enter_Room(room_id, id)) {
+							if (db.enter_Room(room_id, id, password)) {
 								messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
 							} else {
 								messageTo(Function.REJECT_ENTER_ROOM + "|" + room_id);
