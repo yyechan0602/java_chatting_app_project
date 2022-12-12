@@ -112,8 +112,14 @@ public class Server implements Runnable {
 							message_Reset_Members();
 							message_Members();
 							System.out.println(" LOGIN " + id);
-
-							db.enter_Room("대기방", id, "NA");
+							
+							// 대기방으로 들어가기
+							if (db.can_Enter_Room("대기방", id, "NA")) {
+								messageTo(Function.PERMIT_ENTER_ROOM + "|" + "대기방");
+								db.go_Out(id);
+								db.enter_Room("대기방", id);
+							}
+							
 							// 모든 사람에게 현재 방 보내기
 							message_Reset_Rooms();
 							message_Rooms();
@@ -185,9 +191,10 @@ public class Server implements Runnable {
 						// 방이 존재하는지 확인해서 없으면
 						if (!db.Exist_Room(room_id)) {
 							//방 생성
+							password = st.nextToken();
 							isPublic = st.nextToken();
 							number_Of_People = st.nextToken();
-							db.make_Room(room_id, isPublic, number_Of_People);
+							db.make_Room(room_id, password, isPublic, number_Of_People);
 							
 							// 만든 사람에게 방이 만들어졌다는 메시지 출력
 							messageTo(Function.PERMIT_MAKE_ROOM + "|" + room_id);
@@ -209,12 +216,13 @@ public class Server implements Runnable {
 						password = st.nextToken();
 						// 방이 존재하고
 						if (db.Exist_Room(room_id)) {
-							// 방에 들어갈수 있으면 방 만들기
-							if (db.enter_Room(room_id, id, password)) {
+							// 방에 들어갈수 있으면 들어가기
+							if (db.can_Enter_Room(room_id, id, password)) {
 								messageTo(Function.PERMIT_ENTER_ROOM + "|" + room_id);
 								db.go_Out(id);
+								db.enter_Room(room_id, id);
 							} else {
-								// 방에 사람이 꽉 차면 발생
+								// 방에 사람이 꽉 차거나/ 패스워드가 다르면 발생
 								messageTo(Function.REJECT_ENTER_ROOM + "|" + "is_No_More_Space_Error");
 							}
 						} else {

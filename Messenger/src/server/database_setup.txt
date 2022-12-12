@@ -22,7 +22,7 @@ insert into clients(id, password, name, sex) values('lee', '5678', 'seulin', 'fe
 create table chat_room(
 room_id varchar(50) not null,
 password varchar(10) default 'NA',
-isPublic varchar(10) default ('공개'),
+isPublic varchar(10) default '공개',
 number_Of_People int default 1,
 primary key(room_id)
 );
@@ -32,7 +32,7 @@ insert into chat_room(room_id, number_Of_People) values('대기방', 1000);
 create table chat_room_people(
 room_id varchar(50) not null,
 id varchar(50) not null,
-primary key(room_id)
+primary key(id)
 );
 
 
