@@ -1,12 +1,14 @@
 package client;
 
-import java.awt.*;
-import java.awt.Graphics;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import javax.swing.*;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
