@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -14,7 +16,7 @@ import javax.swing.JFrame;
 
 import function.Function;
 
-public class ClientMainForm extends JFrame implements ActionListener, Runnable {
+public class ClientMainForm extends JFrame implements ActionListener, Runnable, MouseListener {
 	CardLayout card = new CardLayout();
 	Login login = new Login();
 	WaitRoom wr = new WaitRoom();
@@ -22,8 +24,10 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	CreateRoom cr = new CreateRoom();
 	GridLayout grid = new GridLayout();
 	PwEnter pe = new PwEnter();
+	PwEnter pe2 = new PwEnter();
 	String id;
 	String pw;
+	int row;
 	
 	JFrame j1 = new JFrame();	// 방 생성 
 	JFrame j2 = new JFrame();	// 로그인 화면 
@@ -70,7 +74,7 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		
+		wr.table1.addMouseListener(this);
 		
 		login.b1.addActionListener(this);
 		login.b2.addActionListener(this);
@@ -90,6 +94,9 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		
 		pe.b11.addActionListener(this);
 		pe.b22.addActionListener(this);
+		
+		pe2.b11.addActionListener(this);
+		pe2.b22.addActionListener(this);
 	}
 
 	public static void main(String[] args) {
@@ -150,14 +157,14 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 	public void enterroom(String room_id, String open, String id, String password)
 	{
 		try {
-			if (open == "공개") {
+			if (open.equals("공개")) {
 				password = "NA";
-				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password).getBytes());
-				System.out.println("공개" +room_id + open + id + password);
+				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
+				System.out.println("공개 ||" +room_id + open + id + password);
 			}
 			else {
-				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password).getBytes());
-				System.out.println("비공개" +room_id + open + id + password);
+				out.write((Function.ENTERROOM + "|" + room_id + "|" + id + "|" + password + "\n").getBytes());
+				System.out.println("비공개 ||" +room_id + open + id + password);
 			}
 		} catch (Exception ex) {
 			
@@ -259,20 +266,40 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 		
 		// 입장하기 
 		else if (e.getSource() == wr.b8) {
-			int row = wr.row;
+			//int row = wr.row;
+			
 			
 			String room_id = wr.table1.getValueAt(row, 0).toString();
 			String open = wr.table1.getValueAt(row, 1).toString();
 			
 			String id = login.tf.getText();
-			String password = pe.tf1.getText();
+			String password = "NA";
 			
-			enterroom(room_id, open, id, password);
+			if (open.equals("비공개")) {
+				pe2.view();
+				
+			}
+			else
+				enterroom(room_id, open, id, password);
+			//System.out.println("입장하기버튼  "+room_id + open + id + password);
+			
 			
 			//System.out.println(room_id+open);
 			
 		}
-		
+		else if (e.getSource() == pe2.b11) {
+			String room_id = wr.table1.getValueAt(row, 0).toString();
+			String open = wr.table1.getValueAt(row, 1).toString();
+			
+			String id = login.tf.getText();
+			String pw = pe2.tf1.getText();
+			
+			enterroom(room_id, open, id, pw);
+			pe2.no_view();
+		}
+		else if (e.getSource() == pe2.b22) {
+			pe2.no_view();
+		}
 		// 옵션
 		else if (e.getSource() == wr.b9) {
 			
@@ -304,6 +331,33 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		row = wr.table1.getSelectedRow();
+		//System.out.println("행 " + row);
+		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -342,7 +396,8 @@ public class ClientMainForm extends JFrame implements ActionListener, Runnable {
 					
 					// 채팅방 입장 
 					case Function.PERMIT_ENTER_ROOM:{
-						
+						err.view("채팅방 입장 성공");
+						break;
 					}
 					
 					case Function.REJECT_ENTER_ROOM:{
