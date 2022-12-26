@@ -1,6 +1,6 @@
 # java_chatting_app_project
 
-자바프로그램과 database를 연동시킴으로써 서버가 있으며 1000명의 동시접속을 허용하는 비 상업용적인 자바 채팅 앱
+자바프로그램과 database를 연동시킴으로써 서버가 있으며 1000명의 동시접속을 허용하는 비 상업적인 자바 채팅 앱
 
 We make Chatting_app using java and mariadb
 
