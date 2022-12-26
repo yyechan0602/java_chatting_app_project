@@ -1,6 +1,6 @@
 # java_chatting_app_project
 
-자바프로그램과 디비를 연동시킨 비상업용 자바 채팅 앱
+자바프로그램과 database를 연동시킨 서버가 있는 1000명 동시접속, 비상업용 자바 채팅 앱
 
 We make Chatting_app using java and mariadb
 
